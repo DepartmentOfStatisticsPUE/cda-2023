@@ -19,7 +19,7 @@ Platform: x86_64-apple-darwin17.0 (64-bit)
 ```
 
 ``` python
-Python 3.10.7 (v3.10.7:6cc6b13308, Sep  5 2022, 14:02:52) [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
+Python 3.10.7 (v3.10.7:6cc6b13308, Sep  5 2022, 14:02:52)
 ```
 
 ``` julia
