@@ -15,7 +15,6 @@
 
 ``` r
 R version 4.2.1 (2022-06-23)
-Platform: x86_64-apple-darwin17.0 (64-bit)
 ```
 
 ``` python
