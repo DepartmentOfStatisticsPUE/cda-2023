@@ -30,6 +30,14 @@ knitr::opts_chunk$set(engine.path = list(
 
 There is no need to install or load packages. All functionalities are build in. One may consider installing `distributions3` package which mimics `Distributions.jl` package.
 
+```{r, eval = FALSE}
+install.packages("distributions3")
+```
+
+```{r}
+library(distributions3)
+```
+
 ## Python
 
 Load modules
@@ -85,6 +93,33 @@ set.seed(20230228)
 rpois(n=10,lambda=1.5)
 rpois(10,1.5)
 ```
+
+## R (`distributions3`)
+
+Exercise 1: generate 10 pseudo-random numbers from Bernoulli(0.7)
+
+```{r}
+set.seed(20230228)
+X <- Bernoulli(0.7)
+random(X, 10)
+```
+
+Exercise 2: generate 10 pseudo-random numbers from Binomial(50,0.7)
+
+```{r}
+set.seed(20230228)
+X <- Binomial(50, 0.7)
+random(X, 10)
+```
+
+Exercise 3: generate 10 pseudo-random numbers from Poisson(1.5)
+
+```{r}
+set.seed(20230228)
+X <- Poisson(1.5)
+random(X, 10)
+```
+
 
 ## Python
 
@@ -161,6 +196,25 @@ dbinom(4,10,0.4)
 1-pbinom(6,10,0.4)
 ```
 
+## R (`distributions3`)
+
+```{r}
+X <- Binomial(10, 0.4)
+```
+
+```{r}
+data.frame(x = 0:10, p = pdf(X, 0:10))
+```
+
+```{r}
+pdf(X, 4)
+```
+
+```{r}
+1-cdf(X, 6)
+```
+
+
 ## Python
 
 ```{python}
@@ -209,6 +263,12 @@ at most 4 car accidents happen.
 ppois(4,2)
 ```
 
+## R (`distributions3`)
+
+```{r}
+cdf(Poisson(2),4)
+```
+
 ## Python
 
 ```{python}
@@ -222,20 +282,3 @@ cdf(Poisson(2),4)
 ```
 :::
 
-## Software versions {.unnumbered}
-
-``` r
-R version 4.2.1 (2022-06-23)
-Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur 11.7.3
-```
-
-``` python
-Python 3.10.7 (v3.10.7:6cc6b13308, Sep  5 2022, 14:02:52) [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
-Type "help", "copyright", "credits" or "license" for more information.
-```
-
-``` julia
-Julia Version 1.8.4
-Commit 00177ebc4fc (2022-12-23 21:32 UTC)
-```
