@@ -1,15 +1,20 @@
-# Categorical Data Abalysis 2022/23
+# Categorical Data Analysis 2022/23
 
 ## Outline of lecture
 
-1.  Discrete distributions [code from
+1.  Discrete distributions [code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/01-distributions.html)
+2.  Maximum Likelihood Estimation (MLE) [code for/from lecture]
 
 ## Required packages / modules
 
--   R: `distributions3`
--   Python: `scipy`, `numpy`, `pandas`
--   Julia: `Distributions.jl`, `DataFrames.jl`
+-   R:
+    -   `distributions3`
+-   Python:
+    -   `scipy`, `numpy`, `pandas`
+-   Julia:
+    -   `Distributions.jl`, `DataFrames.jl`,
+    -   `Optim.jl`
 
 ## Software versions
 
