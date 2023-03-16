@@ -19,7 +19,7 @@
 ## Software versions
 
 ``` r
-R version 4.2.1 (2022-06-23)
+R version 4.2.2 (2022-10-31)
 ```
 
 ``` python
@@ -27,6 +27,6 @@ Python 3.10.7 (v3.10.7:6cc6b13308, Sep  5 2022, 14:02:52)
 ```
 
 ``` julia
-Julia Version 1.8.4
-Commit 00177ebc4fc (2022-12-23 21:32 UTC)
+Julia Version 1.9.0-rc1
+Commit 3b2e0d8fbc1 (2023-03-07 07:51 UTC)
 ```

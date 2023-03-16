@@ -13,22 +13,21 @@ execute:
 ---
 
 ```{r setup, echo = FALSE}
-JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin/")
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
 knitr::opts_chunk$set(engine.path = list(
   python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
   julia = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin/"
 ))
 ```
 
-
 ## Setup
 
-
 ::: panel-tabset
-
 ## R
 
-There is no need to install or load packages. All functionalities are build in. One may consider installing `distributions3` package which mimics `Distributions.jl` package.
+There is no need to install or load packages. All functionalities are
+build in. One may consider installing `distributions3` package which
+mimics `Distributions.jl` package.
 
 ```{r, eval = FALSE}
 install.packages("distributions3")
@@ -48,7 +47,6 @@ import numpy as np
 import pandas as pd
 ```
 
-
 ## Julia
 
 Install modules
@@ -65,8 +63,8 @@ using DataFrames
 using Distributions
 using Random
 ```
-
 :::
+
 ## Exercises from lectures (2023.02.28)
 
 ::: panel-tabset
@@ -119,7 +117,6 @@ set.seed(20230228)
 X <- Poisson(1.5)
 random(X, 10)
 ```
-
 
 ## Python
 
@@ -214,7 +211,6 @@ pdf(X, 4)
 1-cdf(X, 6)
 ```
 
-
 ## Python
 
 ```{python}
@@ -281,4 +277,3 @@ st.poisson(2).cdf(4)
 cdf(Poisson(2),4)
 ```
 :::
-
