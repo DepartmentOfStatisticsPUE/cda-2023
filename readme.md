@@ -9,12 +9,13 @@
 ## Required packages / modules
 
 -   R:
-    -   `distributions3`
+    -  `distributions3`, 
+    - `maxLik`, `rootSolve`
 -   Python:
     -   `scipy`, `numpy`, `pandas`
 -   Julia:
     -   `Distributions.jl`, `DataFrames.jl`,
-    -   `Optim.jl`
+    -   `Optim.jl`, `Roots.jl`
 
 ## Software versions
 
