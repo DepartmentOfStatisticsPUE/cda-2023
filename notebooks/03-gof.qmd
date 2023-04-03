@@ -1,0 +1,317 @@
+---
+title: "Goodness of fit statistics"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+## Setup
+
+::: panel-tabset
+## R
+
+Install `vcd` and `fitdistrplus` packages.
+
+```{r, eval = FALSE}
+install.packages(c("vcd", "fitdistrplus"))
+```
+
+```{r}
+library(vcd)
+library(fitdistrplus)
+```
+
+## Python
+
+Load modules
+
+```{python}
+import scipy.stats as st
+from scipy.optimize import minimize
+import numpy as np
+import pandas as pd
+```
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["HypothesisTests", "StatsBase"])
+```
+
+Load packages
+
+```{julia}
+using Distributions
+using Random
+using HypothesisTests
+using Optim
+using StatsBase
+using DelimitedFiles
+```
+:::
+
+
+
+## Exercise for the lecture
+
+::: panel-tabset
+
+## R
+
+```{r}
+set.seed(1)
+n <- 10000
+x <- rnbinom(n, mu = 3, size = 2)
+## or
+x <- rnbinom(n, prob = 2/(2+3), size = 2)
+x_length <- length(table(x))
+x_dof <- 1+2
+x_fitted <- fitdistr(x = x, densfun = "negative binomial")
+x_fitted
+```
+
+save data for other languages
+
+```{r}
+cat(x, sep = "\n", file = "nb_sim.txt")
+```
+
+Small note regarding the `vcd` package. It gives correct answers but in a slightly different way.
+
+1. `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
+2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 
+
+Thus, if we use `object$fitted` created by `goodfit` to calculate $\chi^2$ and $G^2$ statistics by hand we will get slightly different statistics values than the one returned by `summary.goodfit()` function. Thus, both are accepted results. 
+
+In this material, we use the first approach in Python and Julia.
+
+```{r}
+gof_nb <- goodfit(x, "nbinomial")
+gof_po <- goodfit(x, "poisson")
+gof_nb
+```
+
+```{r}
+summary(gof_nb)
+summary(gof_po)
+```
+Note that we may use $\chi^2$ test but the degrees of freedom and p-value is incorrect as it does not account for number of parameters. For the $\chi^2$ we also use only the non-zero count values.
+
+```{r}
+flag <- gof_nb$observed > 0
+
+chisq.test(x = gof_nb$observed[flag], 
+           p = gof_nb$fitted[flag]/sum(gof_nb$fitted[flag])) 
+```
+
+```{r}
+chisq.test(x = gof_nb$observed[flag], 
+           p = dnbinom(x = gof_nb$count[flag], 
+                       size = x_fitted$estimate[1],
+                       mu = x_fitted$estimate[2]), 
+           rescale.p = TRUE) 
+```
+We need to correct p-value
+
+```{r}
+pchisq(21.158, 19, lower.tail = FALSE)
+```
+
+```{r}
+rootogram(gof_nb, main = "Negative binomial")
+rootogram(gof_po, main = "Poisson")
+```
+
+## Python
+
+Python uses a different specification of negative binomial than we specified in R so we need to rewrite it as follows: 
+
+$$
+p = \frac{\text{size}}{\text{size} + \mu}.
+$$
+
+```{python}
+np.random.seed(1)
+N = 1000
+x = st.nbinom(n = 2, p = 2/(2+3)).rvs(N)
+np.mean(x)
+```
+
+However, these pseudo-random numbers are not the same as in R. So, to make our example comparable with R, we read data generated from R that was saved to text file.
+
+```{python}
+x = np.loadtxt("nb_sim.txt", dtype = np.int64)
+np.mean(x)
+```
+
+Optimization using pmf function
+
+```{python}
+def pdf_nbinom(par, x):
+  pdfnbinom = st.nbinom(par[0],par[1]).logpmf(x)
+  return -np.sum(pdfnbinom)
+
+res = minimize(fun=pdf_nbinom, x0=[2, 0.5], args = (x), method = "Nelder-Mead")
+res
+res.x
+```
+
+**Goodness of fit -- step by step**
+
+$G^2$ and $\chi^2$ GoF can be calculated using `scipy.stats.power_divergence` function
+
+```{python}
+x_uniq_vals, x_uniq_counts = np.unique(x, return_counts=True)
+## we simply use pdf(NB(2.01357331, 0.40157875), x) 
+est_pdf = st.nbinom(res.x[0],res.x[1]).pmf(x_uniq_vals) 
+## probs are not summing to 1 - rescale
+est_pdf = est_pdf/np.sum(est_pdf) 
+```
+
+$G^2$ test
+
+```{python}
+st.power_divergence(x_uniq_counts, 
+                    sum(x_uniq_counts)*est_pdf, 
+                    lambda_ = 0, ddof = 2)
+```
+
+$\chi^2$ test
+
+```{python}
+st.power_divergence(x_uniq_counts, 
+                    sum(x_uniq_counts)*est_pdf, 
+                    lambda_ = 1, ddof = 2)
+```
+
+
+**Rootograms** are not available in python. There are some scripts that recreate this plot using `matplotlib`, see https://stackoverflow.com/questions/38252879/how-to-plot-a-hanging-rootogram-in-python
+
+
+
+
+## Julia
+
+```{julia}
+Random.seed!(123);
+n = 1000;
+x = rand(NegativeBinomial(2, 2/(2+3)), n);
+mean(x)
+```
+
+However, these pseudo-random numbers are not the same as in R. So, to make our example comparable with R, we read data generated from R that was saved to text file.
+
+```{julia}
+x = readdlm("nb_sim.txt", Int);
+x = vec(x);
+mean(x)
+```
+
+```{julia}
+function llnb(par, data)
+  ll = logpdf.(NegativeBinomial(par[1], par[2]), data)
+  return -sum(ll)
+end
+
+res = optimize(par -> llnb(par, x), [2, 0.5])
+res.minimizer
+```
+
+
+Goodness of fit statistics
+
+```{julia}
+x_uniq_dict = sort(countmap(x));
+x_uniq_vals = Int.(keys(x_uniq_dict));
+x_uniq_counts = Int.(values(x_uniq_dict));
+params = res.minimizer;
+est_pdf = pdf.(NegativeBinomial(params[1], params[2]), x_uniq_vals)
+est_pdf = est_pdf ./ sum(est_pdf)
+```
+
+$G^2$ test
+
+```{julia, eval = F}
+PowerDivergenceTest(x_uniq_counts, lambda = 0.0, theta0 = est_pdf) 
+```
+
+
+```julia
+Multinomial Likelihood Ratio Test
+---------------------------------
+Population details:
+    parameter of interest:   Multinomial Probabilities
+    value under h_0:         [0.159332, 0.191992, 0.173119, 0.138601, 0.103959, 0.0748225, 0.0523394, 0.0358562, 0.0241757, 0.0160966  …  0.00693355, 0.00449965, 0.00290263, 0.00186275, 0.00119003, 0.000757253, 0.000480175, 0.000303527, 0.000120296, 4.72388e-5]
+    point estimate:          [0.1583, 0.1969, 0.1699, 0.1356, 0.1025, 0.0748, 0.0565, 0.0357, 0.0244, 0.0164  …  0.0054, 0.0045, 0.0024, 0.0023, 0.0012, 0.0011, 0.0006, 0.0002, 0.0001, 0.0001]
+    95% confidence interval: [(0.1491, 0.1676), (0.1877, 0.2062), (0.1607, 0.1792), (0.1264, 0.1449), (0.0933, 0.1118), (0.0656, 0.0841), (0.0473, 0.0658), (0.0265, 0.045), (0.0152, 0.0337), (0.0072, 0.0257)  …  (0.0, 0.0147), (0.0, 0.0138), (0.0, 0.0117), (0.0, 0.0116), (0.0, 0.0105), (0.0, 0.0104), (0.0, 0.0099), (0.0, 0.0095), (0.0, 0.0094), (0.0, 0.0094)]
+
+Test summary:
+    outcome with 95% confidence: fail to reject h_0
+    one-sided p-value:           0.8108
+
+Details:
+    Sample size:        10000
+    statistic:          14.378553064834735
+    degrees of freedom: 20
+    residuals:          [-0.258657, 1.12004, -0.77377, -0.805987, -0.452445, -0.00822523, 1.81864, -0.082495, 0.144257, 0.239165  …  -1.84171, 0.000526521, -0.932932, 1.0131, 0.0288963, 1.24553, 0.546826, -0.594231, -0.185051, 0.767654]
+    std. residuals:     [-0.282106, 1.24602, -0.850924, -0.868412, -0.477971, -0.00855137, 1.86819, -0.0840149, 0.146033, 0.241114  …  -1.84813, 0.000527709, -0.934289, 1.01405, 0.0289135, 1.246, 0.546958, -0.594321, -0.185062, 0.767672]
+```
+
+Correct p-value for the correct number of dof.
+
+```{julia}
+1-cdf(Chisq(19), 14.378553064834735)
+```
+
+$\chi^2$ test
+
+```{julia, eval = F}
+PowerDivergenceTest(x_uniq_counts, lambda = 1.0, theta0 = est_pdf)
+```
+
+```julia
+Pearson's Chi-square Test
+-------------------------
+Population details:
+    parameter of interest:   Multinomial Probabilities
+    value under h_0:         [0.159332, 0.191992, 0.173119, 0.138601, 0.103959, 0.0748225, 0.0523394, 0.0358562, 0.0241757, 0.0160966  …  0.00693355, 0.00449965, 0.00290263, 0.00186275, 0.00119003, 0.000757253, 0.000480175, 0.000303527, 0.000120296, 4.72388e-5]
+    point estimate:          [0.1583, 0.1969, 0.1699, 0.1356, 0.1025, 0.0748, 0.0565, 0.0357, 0.0244, 0.0164  …  0.0054, 0.0045, 0.0024, 0.0023, 0.0012, 0.0011, 0.0006, 0.0002, 0.0001, 0.0001]
+    95% confidence interval: [(0.1491, 0.1676), (0.1877, 0.2062), (0.1607, 0.1792), (0.1264, 0.1449), (0.0933, 0.1118), (0.0656, 0.0841), (0.0473, 0.0658), (0.0265, 0.045), (0.0152, 0.0337), (0.0072, 0.0257)  …  (0.0, 0.0147), (0.0, 0.0138), (0.0, 0.0117), (0.0, 0.0116), (0.0, 0.0105), (0.0, 0.0104), (0.0, 0.0099), (0.0, 0.0095), (0.0, 0.0094), (0.0, 0.0094)]
+
+Test summary:
+    outcome with 95% confidence: fail to reject h_0
+    one-sided p-value:           0.8037
+
+Details:
+    Sample size:        10000
+    statistic:          14.510593683125506
+    degrees of freedom: 20
+    residuals:          [-0.258657, 1.12004, -0.77377, -0.805987, -0.452445, -0.00822523, 1.81864, -0.082495, 0.144257, 0.239165  …  -1.84171, 0.000526521, -0.932932, 1.0131, 0.0288963, 1.24553, 0.546826, -0.594231, -0.185051, 0.767654]
+    std. residuals:     [-0.282106, 1.24602, -0.850924, -0.868412, -0.477971, -0.00855137, 1.86819, -0.0840149, 0.146033, 0.241114  …  -1.84813, 0.000527709, -0.934289, 1.01405, 0.0289135, 1.246, 0.546958, -0.594321, -0.185062, 0.767672]
+```
+
+Note that p-value is calculated wrongly as correct df is 18 not 20. So correct p-value is: 
+
+```{julia}
+1-cdf(Chisq(19), 14.510593683125506)
+```
+
+:::

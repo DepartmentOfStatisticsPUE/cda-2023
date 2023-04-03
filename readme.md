@@ -4,18 +4,23 @@
 
 1.  Discrete distributions [[code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/01-distributions.html)]
-2.  Maximum Likelihood Estimation (MLE) [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/02-mle.html)]
-
+2.  Maximum Likelihood Estimation (MLE) [[code for/from
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/02-mle.html)]
+3.  Goodnes of fit (GoF) [[code for/from
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/03-gof.html)]
+    
 ## Required packages / modules
 
 -   R:
-    -  `distributions3`, 
-    - `maxLik`, `rootSolve`
+    -   `distributions3`,
+    -   `maxLik`, `rootSolve`
+    - `vcd`, `fitdistrplus`
 -   Python:
     -   `scipy`, `numpy`, `pandas`
 -   Julia:
     -   `Distributions.jl`, `DataFrames.jl`,
     -   `Optim.jl`, `Roots.jl`
+    - `HypothesisTests.jl`, `StatsBase.jl`
 
 ## Software versions
 
