@@ -12,4 +12,8 @@ Encoding: UTF-8
 RnwWeave: knitr
 LaTeX: pdfLaTeX
 
+PythonType: system
+PythonVersion: 3.10.7
+PythonPath: /Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10
+
 SpellingDictionary: en_GB

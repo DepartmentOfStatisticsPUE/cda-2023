@@ -84,11 +84,23 @@ x <- rnbinom(n, mu = 3, size = 2)
 x <- rnbinom(n, prob = 2/(2+3), size = 2)
 x_length <- length(table(x))
 x_dof <- 1+2
-x_fitted <- fitdistr(x = x, densfun = "negative binomial")
+x_fitted <- fitdistr(x = x, densfun = "negative binomial") ## using MASS::fitdistr
 x_fitted
 ```
 
+The same using `fitdistrplus` package
+
+```{r}
+fitdist(x, "nbinom")
+```
+`Fitdistrplus` package have PDF and CDF plots for assessing the fit.
+
+```{r}
+fitdist(x, "nbinom") |> plot()
+```
+
 save data for other languages
+
 
 ```{r}
 cat(x, sep = "\n", file = "nb_sim.txt")
@@ -97,7 +109,11 @@ cat(x, sep = "\n", file = "nb_sim.txt")
 Small note regarding the `vcd` package. It gives correct answers but in a slightly different way.
 
 1. `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
-2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 
+2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calcuated as 
+
+$$
+\widehat{\text{resid}}_{k,\text{Pearson}} = \frac{n_k - \hat{n}_k}{\sqrt{\hat{n}_k}}
+$$
 
 Thus, if we use `object$fitted` created by `goodfit` to calculate $\chi^2$ and $G^2$ statistics by hand we will get slightly different statistics values than the one returned by `summary.goodfit()` function. Thus, both are accepted results. 
 
@@ -113,28 +129,6 @@ gof_nb
 summary(gof_nb)
 summary(gof_po)
 ```
-Note that we may use $\chi^2$ test but the degrees of freedom and p-value is incorrect as it does not account for number of parameters. For the $\chi^2$ we also use only the non-zero count values.
-
-```{r}
-flag <- gof_nb$observed > 0
-
-chisq.test(x = gof_nb$observed[flag], 
-           p = gof_nb$fitted[flag]/sum(gof_nb$fitted[flag])) 
-```
-
-```{r}
-chisq.test(x = gof_nb$observed[flag], 
-           p = dnbinom(x = gof_nb$count[flag], 
-                       size = x_fitted$estimate[1],
-                       mu = x_fitted$estimate[2]), 
-           rescale.p = TRUE) 
-```
-We need to correct p-value
-
-```{r}
-pchisq(21.158, 19, lower.tail = FALSE)
-```
-
 ```{r}
 rootogram(gof_nb, main = "Negative binomial")
 rootogram(gof_po, main = "Poisson")
@@ -182,8 +176,8 @@ $G^2$ and $\chi^2$ GoF can be calculated using `scipy.stats.power_divergence` fu
 x_uniq_vals, x_uniq_counts = np.unique(x, return_counts=True)
 ## we simply use pdf(NB(2.01357331, 0.40157875), x) 
 est_pdf = st.nbinom(res.x[0],res.x[1]).pmf(x_uniq_vals) 
-## probs are not summing to 1 - rescale
-est_pdf = est_pdf/np.sum(est_pdf) 
+est_pdf = est_pdf/np.sum(est_pdf)
+np.round(est_pdf*100,)
 ```
 
 $G^2$ test
@@ -204,7 +198,6 @@ st.power_divergence(x_uniq_counts,
 
 
 **Rootograms** are not available in python. There are some scripts that recreate this plot using `matplotlib`, see https://stackoverflow.com/questions/38252879/how-to-plot-a-hanging-rootogram-in-python
-
 
 
 
@@ -243,8 +236,8 @@ x_uniq_dict = sort(countmap(x));
 x_uniq_vals = Int.(keys(x_uniq_dict));
 x_uniq_counts = Int.(values(x_uniq_dict));
 x_params = res.minimizer;
-est_pdf = pdf.(NegativeBinomial(x_params[1], x_params[2]), x_uniq_vals)
-est_pdf = est_pdf ./ sum(est_pdf)
+est_pdf = pdf.(NegativeBinomial(x_params[1], x_params[2]), x_uniq_vals);
+est_pdf = est_pdf ./ sum(est_pdf);
 ```
 
 $G^2$ test
@@ -252,7 +245,6 @@ $G^2$ test
 ```{julia, eval = F}
 PowerDivergenceTest(x_uniq_counts, lambda = 0.0, theta0 = est_pdf) 
 ```
-
 
 ```julia
 Multinomial Likelihood Ratio Test
@@ -314,5 +306,135 @@ Note that p-value is calculated wrongly as correct df is 18 not 20. So correct p
 ```{julia}
 1-cdf(Chisq(19), 42.242072813765624)
 ```
+
+:::
+
+
+## Example from the lecture
+
+::: panel-tabset
+
+## R
+
+Vector with data from the lecture
+
+```{r}
+X <- rep(0:4, c(100,50,15,5,1))
+X_tab <- table(X)
+X_tab
+```
+
+Check if Poisson distribution fits the data 
+
+```{r}
+X_po <- goodfit(X, "poisson")
+X_po
+```
+Step by step:
+
+1. estimate $\lambda$.
+
+```{r}
+lambda_hat <- mean(X)
+lambda_hat
+```
+
+2. get expected values
+
+```{r}
+n_hat <- length(X)*dpois(0:4, lambda_hat)
+n_hat
+```
+
+3. get pearson residual
+
+```{r}
+r_hat <- (as.vector(X_tab)-n_hat)/sqrt(n_hat)
+r_hat
+```
+
+4. Save the result into a table
+
+```{r}
+X_dt <- data.frame(X = 0:4, n_hat = n_hat, r_hat = r_hat)
+X_dt
+```
+Check if negative binomail distribution fits the data better.
+
+```{r}
+X_nb <- goodfit(X, "nbinom")
+X_nb
+```
+Let's now look at $G^2$ test. Results indicate that Poisson and negative binomial distribution fit the data equally well.
+
+```{r}
+summary(X_po)
+summary(X_nb)
+```
+
+Now, let's see what AIC, BIC and LR test will say.
+
+
+```{r}
+X_fit_ll_po <- fitdistr(X, "poisson")
+X_fit_ll_nb <- fitdistr(X, "negative binomial")
+```
+
+The lower the better -- Poisson seems to be a better distribution
+
+```{r}
+AIC(X_fit_ll_po, X_fit_ll_nb)
+```
+
+The lower the better -- Poisson seems to be a better distribution. Note that in this case the difference is higher due to larger number of parameters for NB, so BIC suggest distribution with lower number of parameters.
+
+```{r}
+BIC(X_fit_ll_po, X_fit_ll_nb)
+```
+Now, let's see what LR test will tell. For this example it seems that two distrubutions equally well fit the data.
+
+```{r}
+LR_test <- 2*X_fit_ll_nb$loglik - 2*X_fit_ll_po$loglik
+LR_test_p <- pchisq(LR_test, 1, lower.tail = F)
+data.frame(LR=LR_test, df = 1, p_val = LR_test_p)
+```
+**Conclusion**: based only on the data we cannot indicate which distribution fit the data better. 
+
+## Python
+
+Code in Python that reproduce R results.
+
+```{python}
+## generate data
+X = np.concatenate([np.repeat(i, n) for i, n in enumerate([100, 50, 15, 5, 1])])
+## frequency table
+X_tab = pd.Series(X).value_counts()
+## estimated lambda
+lambda_hat = np.mean(X)
+## fitted counts
+n_hat = len(X) * st.poisson.pmf(np.arange(0, 5), lambda_hat)
+## pearson residual
+r_hat = (X_tab.values - n_hat) / np.sqrt(n_hat)
+## store results in data.frame
+X_dt = pd.DataFrame({'X': np.arange(0, 5), 'n_hat': n_hat, 'r_hat': r_hat})
+X_dt
+```
+```{python}
+## loglik for n
+def pdf_nbinom(par, x):
+  pdfnbinom = st.nbinom(par[0],par[1]).logpmf(x)
+  return -np.sum(pdfnbinom)
+
+res_nb = minimize(fun=pdf_nbinom, x0=[2, 0.5], args = (X), method = "Nelder-Mead")
+ll_po = -sum(st.poisson(np.mean(X)).logpmf(X))
+ll_nb = res_nb.fun
+
+LR_test = 2*ll_po - 2*ll_nb
+[LR_test, 1, 1 - st.chi2.cdf(LR_test, 1)]
+```
+
+## Julia
+
+TBA
 
 :::
