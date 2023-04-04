@@ -109,7 +109,7 @@ cat(x, sep = "\n", file = "nb_sim.txt")
 Small note regarding the `vcd` package. It gives correct answers but in a slightly different way.
 
 1. `goodfit` function returns a list with `fitted` (expected) frequencies under a given distribution using `pdf` of this distribution
-2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calcuated as 
+2. `summary(goodfit object)` returns a $\chi^2$ and $G^2$ tests using `cdf` of a given distribution. 3. Pearson residuals are calculated as 
 
 $$
 \widehat{\text{resid}}_{k,\text{Pearson}} = \frac{n_k - \hat{n}_k}{\sqrt{\hat{n}_k}}
@@ -356,10 +356,10 @@ r_hat
 4. Save the result into a table
 
 ```{r}
-X_dt <- data.frame(X = 0:4, n_hat = n_hat, r_hat = r_hat)
+X_dt <- data.frame(X = 0:4, n = as.vector(X_tab), n_hat = n_hat, r_hat = r_hat)
 X_dt
 ```
-Check if negative binomail distribution fits the data better.
+Check if negative binomial distribution fits the data better.
 
 ```{r}
 X_nb <- goodfit(X, "nbinom")
@@ -391,7 +391,7 @@ The lower the better -- Poisson seems to be a better distribution. Note that in 
 ```{r}
 BIC(X_fit_ll_po, X_fit_ll_nb)
 ```
-Now, let's see what LR test will tell. For this example it seems that two distrubutions equally well fit the data.
+Now, let's see what LR test will tell. For this example it seems that two distributions equally well fit the data.
 
 ```{r}
 LR_test <- 2*X_fit_ll_nb$loglik - 2*X_fit_ll_po$loglik
@@ -416,7 +416,7 @@ n_hat = len(X) * st.poisson.pmf(np.arange(0, 5), lambda_hat)
 ## pearson residual
 r_hat = (X_tab.values - n_hat) / np.sqrt(n_hat)
 ## store results in data.frame
-X_dt = pd.DataFrame({'X': np.arange(0, 5), 'n_hat': n_hat, 'r_hat': r_hat})
+X_dt = pd.DataFrame({'X': np.arange(0, 5), 'n': X_tab.values, 'n_hat': n_hat, 'r_hat': r_hat})
 X_dt
 ```
 ```{python}
@@ -426,11 +426,19 @@ def pdf_nbinom(par, x):
   return -np.sum(pdfnbinom)
 
 res_nb = minimize(fun=pdf_nbinom, x0=[2, 0.5], args = (X), method = "Nelder-Mead")
-ll_po = -sum(st.poisson(np.mean(X)).logpmf(X))
-ll_nb = res_nb.fun
-
-LR_test = 2*ll_po - 2*ll_nb
+ll_po = sum(st.poisson(np.mean(X)).logpmf(X))
+ll_nb = -res_nb.fun
+LR_test =  2*ll_nb - 2*ll_po
 [LR_test, 1, 1 - st.chi2.cdf(LR_test, 1)]
+```
+
+```{python}
+AIC_po = 2*1 - 2*ll_po
+AIC_nb = 2*2 - 2*ll_nb
+[AIC_nb, AIC_po]
+BIC_po = np.log(len(X))*1 - 2*ll_po
+BIC_nb = np.log(len(X))*2 - 2*ll_nb
+[BIC_nb, BIC_po]
 ```
 
 ## Julia
