@@ -6,7 +6,7 @@
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/01-distributions.html)]
 2.  Maximum Likelihood Estimation (MLE) [[code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/02-mle.html)]
-3.  Goodnes of fit (GoF) [[code for/from
+3.  Goodness of fit (GoF) [[code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/03-gof.html)]
     
 ## Required packages / modules
