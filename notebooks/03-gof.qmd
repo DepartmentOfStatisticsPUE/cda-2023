@@ -94,7 +94,7 @@ The same using `fitdistrplus` package
 ```{r}
 fitdist(x, "nbinom")
 ```
-`Fitdistrplus` package have PDF and CDF plots for assessing the fit.
+`fitdistrplus` package have PDF and CDF plots for assessing the fit.
 
 ```{r}
 fitdist(x, "nbinom") |> plot()
