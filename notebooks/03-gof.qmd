@@ -65,6 +65,7 @@ using HypothesisTests
 using Optim
 using StatsBase
 using DelimitedFiles
+using DataFrames
 ```
 :::
 
@@ -443,6 +444,14 @@ BIC_nb = np.log(len(X))*2 - 2*ll_nb
 
 ## Julia
 
-TBA
+```{julia}
+X = vcat([fill(i-1,n) for (i, n) in enumerate([100,50,15,5,1])]...);
+X_tab = sort(countmap(X));
+lambda_hat = mean(X);
+n_hat = length(X) * pdf.(Poisson(lambda_hat), 0:4);
+r_hat = (values(X_tab) .- n_hat) ./ sqrt.(n_hat);
+X_dt = DataFrame(X = 0:4, n = values(X_tab).*1, n_hat = n_hat, r_hat = r_hat)
+```
+
 
 :::
