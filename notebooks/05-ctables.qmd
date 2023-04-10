@@ -1,0 +1,86 @@
+---
+title: "Goodness of fit statistics"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+
+```{r setup, echo = FALSE}
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+## Setup
+
+::: panel-tabset
+## R
+
+Install `vcd` packages if necessary.
+
+```{r, eval = FALSE}
+install.packages("vcd")
+```
+
+```{r}
+library(vcd)
+```
+
+Read in the dataset for the lecture. 
+
+```{r}
+df <- read.csv("data/polish-jvs.csv", colClasses = c(rep("character", 5), "numeric"))
+head(df)
+```
+
+
+
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install pingouin 
+```
+
+```{python}
+import numpy as np
+import scipy.stats as st
+import pingouin as pg
+import pandas as pd
+```
+
+## Julia
+
+Install modules
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["HypothesisTests", "StatsBase", "CSV"])
+```
+
+Load packages
+
+```{julia}
+using Random
+using Distributions
+using HypothesisTests
+using StatsBase
+using DataFrames
+using CSV
+```
+:::
+
+
+
