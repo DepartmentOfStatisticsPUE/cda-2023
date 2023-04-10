@@ -35,7 +35,7 @@ Source:
 3.  Goodness of fit (GoF) [[code for/from
     lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/03-gof.html)]
 4. Contingency tables:
-    + Simpson's paradox [[code for/from lecture]((https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
+    + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
     + 
 
 ## Required packages / modules
