@@ -8,24 +8,25 @@ Source:
 + woj -- region (województwo) id (02, 04, ..., 32)
 + public -- is the company public (1) or private (0)?
 + size -- size of the company (small = up tp 9 employees, medium = 10 to 49, big = over 49)
++ nace -- NACE (PKD) sections (1 letter)
 + nace_division -- NACE (PKD) division (2-digits, https://www.biznes.gov.pl/pl/klasyfikacja-pkd) 
 + vacancies -- how many vacancies the company reported?
 
 Sample rows from the dataset
 
-```{r}
-           id woj public   size nace_division vacancies
-    1:  27350  14      1  Large            84         2
-    2:  26705  14      1  Large            84         1
-    3: 257456  24      1  Large            84         2
-    4: 183657  16      1 Medium            84         0
-    5: 200042  18      1 Medium            84         0
-   ---                                                 
-57476: 244800  08      1 Medium            85         0
-57477:  62309  08      1 Medium            93         0
-57478: 106708  08      0 Medium            08         0
-57479:  62264  08      0 Medium            08         0
-57480: 255865  08      0  Small            23         0
+```r
+           id woj public   size nace nace_division vacancies
+    1:  27350  14      1  Large    O            84         2
+    2:  26705  14      1  Large    O            84         1
+    3: 257456  24      1  Large    O            84         2
+    4: 183657  16      1 Medium    O            84         0
+    5: 200042  18      1 Medium    O            84         0
+   ---                                                      
+57476: 244800  08      1 Medium    P            85         0
+57477:  62309  08      1 Medium    R            93         0
+57478: 106708  08      0 Medium    B            08         0
+57479:  62264  08      0 Medium    B            08         0
+57480: 255865  08      0  Small    C            23         0
 ```
 
 ## Outline of lecture

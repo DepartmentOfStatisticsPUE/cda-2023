@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Goodness of fit statistics</title>
+<title>Contingency tables and Cramer’s V</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2626,7 +2626,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Goodness of fit statistics</h1>
+<h1 class="title">Contingency tables and Cramer’s V</h1>
 </div>
 
 
@@ -2659,16 +2659,16 @@ vertical-align: -.125em;
 </div>
 <p>Read in the dataset for the lecture.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;character&quot;</span>, <span class="dv">5</span>), <span class="st">&quot;numeric&quot;</span>))</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;character&quot;</span>, <span class="dv">6</span>), <span class="st">&quot;numeric&quot;</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      id woj public   size nace_division vacancies
-1  27350  14      1  Large            84         2
-2  26705  14      1  Large            84         1
-3 257456  24      1  Large            84         2
-4 183657  16      1 Medium            84         0
-5 200042  18      1 Medium            84         0
-6  26050  14      1  Large            91         4</code></pre>
+<pre><code>      id woj public   size nace nace_division vacancies
+1  27350  14      1  Large    O            84         2
+2  26705  14      1  Large    O            84         1
+3 257456  24      1  Large    O            84         2
+4 183657  16      1 Medium    O            84         0
+5 200042  18      1 Medium    O            84         0
+6  26050  14      1  Large    R            91         4</code></pre>
 </div>
 </div>
 </div>
@@ -2686,15 +2686,15 @@ vertical-align: -.125em;
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.mosaicplot <span class="im">import</span> mosaic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, dtype<span class="op">=</span>{<span class="st">&quot;id&quot;</span>: np.int64, <span class="st">&quot;woj&quot;</span>:<span class="bu">str</span>, <span class="st">&quot;public&quot;</span>:<span class="bu">str</span>,<span class="st">&quot;size&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace_division&quot;</span>: <span class="bu">str</span>})</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, dtype<span class="op">=</span>{<span class="st">&quot;id&quot;</span>: np.int64, <span class="st">&quot;woj&quot;</span>:<span class="bu">str</span>, <span class="st">&quot;public&quot;</span>:<span class="bu">str</span>,<span class="st">&quot;size&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace_division&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace&quot;</span>: <span class="bu">str</span>})</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       id woj public    size nace_division  vacancies
-0   27350  14      1   Large            84          2
-1   26705  14      1   Large            84          1
-2  257456  24      1   Large            84          2
-3  183657  16      1  Medium            84          0
-4  200042  18      1  Medium            84          0</code></pre>
+<pre><code>       id woj public    size nace nace_division  vacancies
+0   27350  14      1   Large    O            84          2
+1   26705  14      1   Large    O            84          1
+2  257456  24      1   Large    O            84          2
+3  183657  16      1  Medium    O            84          0
+4  200042  18      1  Medium    O            84          0</code></pre>
 </div>
 </div>
 </div>
@@ -2717,18 +2717,18 @@ vertical-align: -.125em;
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">read</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, DataFrame, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            types <span class="op">=</span> <span class="fu">Dict</span>(<span class="op">:</span>id <span class="op">=&gt;</span> <span class="dt">Int64</span>, <span class="op">:</span>woj<span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>public<span class="op">=&gt;</span> <span class="dt">String</span>, </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                         <span class="op">:</span>size <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace_division <span class="op">=&gt;</span> <span class="dt">String</span>));</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                         <span class="op">:</span>size <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace_division <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace <span class="op">=&gt;</span> <span class="dt">String</span>));</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>5×6 DataFrame
- Row │ id      woj     public  size    nace_division  vacancies
-     │ Int64?  String  String  String  String         Int64
-─────┼──────────────────────────────────────────────────────────
-   1 │  27350  14      1       Large   84                     2
-   2 │  26705  14      1       Large   84                     1
-   3 │ 257456  24      1       Large   84                     2
-   4 │ 183657  16      1       Medium  84                     0
-   5 │ 200042  18      1       Medium  84                     0</code></pre>
+<pre><code>5×7 DataFrame
+ Row │ id      woj     public  size    nace    nace_division  vacancies
+     │ Int64?  String  String  String  String  String         Int64
+─────┼──────────────────────────────────────────────────────────────────
+   1 │  27350  14      1       Large   O       84                     2
+   2 │  26705  14      1       Large   O       84                     1
+   3 │ 257456  24      1       Large   O       84                     2
+   4 │ 183657  16      1       Medium  O       84                     0
+   5 │ 200042  18      1       Medium  O       84                     0</code></pre>
 </div>
 </div>
 </div>
