@@ -1,5 +1,5 @@
 ---
-title: "Goodness of fit statistics"
+title: "Contingency tables and Cramer's V"
 format: 
   html:
     self-contained: true
@@ -39,11 +39,9 @@ library(vcd)
 Read in the dataset for the lecture. 
 
 ```{r}
-df <- read.csv("data/polish-jvs.csv", colClasses = c(rep("character", 5), "numeric"))
+df <- read.csv("../data/polish-jvs.csv", colClasses = c(rep("character", 5), "numeric"))
 head(df)
 ```
-
-
 
 
 ## Python
@@ -59,6 +57,13 @@ import numpy as np
 import scipy.stats as st
 import pingouin as pg
 import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.graphics.mosaicplot import mosaic
+```
+
+```{python}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str})
+df.head()
 ```
 
 ## Julia
@@ -67,7 +72,7 @@ Install modules
 
 ```{julia, eval = F}
 using Pkg
-Pkg.add(["HypothesisTests", "StatsBase", "CSV"])
+Pkg.add(["HypothesisTests", "StatsBase", "CSV", "FreqTables"])
 ```
 
 Load packages
@@ -79,8 +84,60 @@ using HypothesisTests
 using StatsBase
 using DataFrames
 using CSV
+using FreqTables
 ```
+
+
+```{julia}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String));
+first(df, 5)
+```
+
 :::
 
 
+## Contingency tables -- $\chi^2$ test and Cramer's V correlation coefficient
 
+Is there an association between size, and having at least one vacancy? If yes, what is the size of this effect (i.e. correlation)?
+
+::: panel-tabset
+## R
+
+```{r}
+df$vac <- df$vacancies > 0
+tab1 <- with(df, table(size, vac))
+prop.table(tab1, margin=1)
+prop.table(tab1, margin=2)
+mosaicplot(tab1)
+chisq.test(tab1)
+```
+```{r}
+assocstats(tab1)
+```
+```{r}
+xtabs(~size+vac, df) |> summary()
+```
+
+## Python
+
+```{python}
+df["vac"] = np.where(df["vacancies"] > 0, True, False)
+mosaic(df, ['size', 'vac'])
+plt.show()
+tab1 = st.contingency.crosstab(df["size"], df["vac"])
+res1=st.chi2_contingency(tab1.count)
+[res1.statistic, np.sqrt(res1.statistic/np.sum(tab1.count))]
+pg.chi2_independence(df, x = "size", y = "vac")
+```
+## Julia
+
+```{julia}
+df.vac = ifelse.(df.vacancies .> 0, true, false);
+tab1=freqtable(df, :size, :vac)
+res1=ChisqTest(tab1)
+sqrt(res1.stat / sum(tab1))
+```
+
+:::
