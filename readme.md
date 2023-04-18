@@ -1,5 +1,18 @@
 # Categorical Data Analysis 2022/23
 
+## Outline of lecture
+
+1.  Discrete distributions [[code for/from
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/01-distributions.html)]
+2.  Maximum Likelihood Estimation (MLE) [[code for/from
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/02-mle.html)]
+3.  Goodness of fit (GoF) [[code for/from
+    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/03-gof.html)]
+4. Contingency tables:
+    + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
+    + Contingency tables and Cramer's V [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/05-ctables.html)]
+
+
 ## Description of the data
 
 Source:
@@ -7,7 +20,7 @@ Source:
 + id -- company identifier
 + woj -- region (województwo) id (02, 04, ..., 32)
 + public -- is the company public (1) or private (0)?
-+ size -- size of the company (small = up tp 9 employees, medium = 10 to 49, big = over 49)
++ size -- size of the company (small = up to 9 employees, medium = 10 to 49, big = over 49)
 + nace -- NACE (PKD) sections (1 letter)
 + nace_division -- NACE (PKD) division (2-digits, https://www.biznes.gov.pl/pl/klasyfikacja-pkd) 
 + vacancies -- how many vacancies the company reported?
@@ -29,17 +42,6 @@ Sample rows from the dataset
 57480: 255865  08      0  Small    C            23         0
 ```
 
-## Outline of lecture
-
-1.  Discrete distributions [[code for/from
-    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/01-distributions.html)]
-2.  Maximum Likelihood Estimation (MLE) [[code for/from
-    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/02-mle.html)]
-3.  Goodness of fit (GoF) [[code for/from
-    lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/03-gof.html)]
-4. Contingency tables:
-    + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
-    + Contingency tables and Cramer's V [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/05-ctables.html)]
 
 ## Required packages / modules
 
