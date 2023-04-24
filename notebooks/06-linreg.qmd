@@ -36,15 +36,20 @@ install.packages("marginaleffects")
 library(marginaleffects)
 ```
 
-Read in the dataset for the lecture -- specifying column classes (types)
+Read in the dataset for the lecture and specify column classes (types).
 
 ```{r}
-df <- read.csv("../data/polish-jvs.csv", colClasses = c(rep("character", 6), "numeric"))
-df$woj <- as.factor(df$woj)
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
 head(df)
 ```
 
-Read in the dataset for the lecture -- we forgot to specify classes
+Check the levels
+
+```{r}
+levels(df$woj)
+```
+
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
 
 ```{r}
 df_wrong <- read.csv("../data/polish-jvs.csv")
@@ -66,14 +71,14 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 ```
 
-Read in the dataset for the lecture -- specifying column classes (types)
+Read in the dataset for the lecture and specify column classes (types).
 
 ```{python}
 df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
 df.head()
 ```
 
-Read in the dataset for the lecture -- we forgot to specify classes
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
 
 ```{python}
 df_wrong = pd.read_csv("../data/polish-jvs.csv")
@@ -102,7 +107,7 @@ using Statistics
 using DataFrames
 ```
 
-Read in the dataset for the lecture -- specifying column classes (types)
+Read in the dataset for the lecture and specify column classes (types).
 
 ```{julia}
 df=CSV.read("../data/polish-jvs.csv", DataFrame, 
@@ -111,7 +116,7 @@ df=CSV.read("../data/polish-jvs.csv", DataFrame,
 first(df, 5)
 ```
 
-Read in the dataset for the lecture -- we forgot to specify classes
+Read in the dataset for the lecture but let's consider that we forgot to specify classes/types, so `woj` is treated as numeric variable.
 
 ```{julia}
 df_wrong=CSV.read("../data/polish-jvs.csv", DataFrame);
@@ -123,6 +128,18 @@ first(df_wrong, 5)
 
 ## Categorical Variables in regression
 
+Consider the following model that tries to explain level of `vacancies` using `woj`. If `woj` would be treated as continuous than the postulated model has the following form
+
+$$
+\text{vacancies} = \beta_0 + \beta_1\text{woj} + \epsilon.
+$$
+However, `woj` is categorical, so this model is incorrect. We should consider the following model with *dummy variables*
+
+
+$$
+\text{vacancies} = \beta_0 + \beta_1I(\text{woj='04'})+ \beta_1I(\text{woj='06'}) + ... + \beta_1I(\text{woj='32'}) \epsilon.
+$$
+Note that code `02` is missing, as it is the reference level.
 
 ::: panel-tabset
 ## R
@@ -161,7 +178,25 @@ summary(model4)
 mean(tab1$vacancies)
 ```
 
+## Python
 
+## Julia
+
+:::
+
+## Margial effects
+
+
+Consider the following model
+
+$$
+\text{vacancies} = \text{woj} + \text{size} + \text{public} + \text{woj}\times\text{size} +\text{woj}\times\text{public}, 
+$$
+
+where variable `woj` is present two times and $\times$ means interaction between two variables.
+
+::: panel-tabset
+## R
 Marginal effects
 
 ```{r}
@@ -169,9 +204,14 @@ model5 <- lm(vacancies ~ woj*size + woj*public, df)
 summary(model5)
 ```
 
+Calculate **Average Marginal Effects**.
+
 ```{r}
 avg_slopes(model5)
 ```
+
+Calculate **Marginal Effects at means**.
+
 ```{r}
 avg_slopes(model5, newdata = "mean")
 ```
