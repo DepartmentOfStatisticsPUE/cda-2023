@@ -12,6 +12,9 @@
     + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
     + Contingency tables and Cramer's V [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/05-ctables.html)]
 5. Categorical data in regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/06-linreg.html)]
+6. Generalized linear models 
+  -- Logistic regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/07-glm-lr.html)]
+  -- Count regression 
 
 ## Required packages / modules
 
@@ -19,7 +22,8 @@
     -   `distributions3`,
     -   `maxLik`, `rootSolve`
     - `vcd`, `fitdistrplus`
-    - `marginaleffects` (`modelsummary` may be also useful)
+    - `marginaleffects`, `modelsummary` 
+    - `car`
 -   Python:
     -   `scipy`, `numpy`, `pandas`
     - `pingouin`, `matplotlib`, `statsmodels`
@@ -28,6 +32,7 @@
     -   `Optim.jl`, `Roots.jl`
     - `HypothesisTests.jl`, `StatsBase.jl`
     - `FreqTables.jl`, `CSV.jl`
+    - `Effects.jl`
 
 
 ## Description of the data
