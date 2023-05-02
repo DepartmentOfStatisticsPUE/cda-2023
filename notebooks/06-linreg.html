@@ -2662,19 +2662,83 @@ vertical-align: -.125em;
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="st">&quot;character&quot;</span>, <span class="st">&quot;factor&quot;</span>, <span class="fu">rep</span>(<span class="st">&quot;character&quot;</span>, <span class="dv">4</span>), <span class="st">&quot;numeric&quot;</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      id woj public   size nace nace_division vacancies
-1  27350  14      1  Large    O            84         2
-2  26705  14      1  Large    O            84         1
-3 257456  24      1  Large    O            84         2
-4 183657  16      1 Medium    O            84         0
-5 200042  18      1 Medium    O            84         0
-6  26050  14      1  Large    R            91         4</code></pre>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">woj</th>
+<th style="text-align: left;">public</th>
+<th style="text-align: left;">size</th>
+<th style="text-align: left;">nace</th>
+<th style="text-align: left;">nace_division</th>
+<th style="text-align: right;">vacancies</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">27350</td>
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">26705</td>
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">257456</td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">183657</td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">200042</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">26050</td>
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">91</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <p>Check the levels</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>woj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>woj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] &quot;02&quot; &quot;04&quot; &quot;06&quot; &quot;08&quot; &quot;10&quot; &quot;12&quot; &quot;14&quot; &quot;16&quot; &quot;18&quot; &quot;20&quot; &quot;22&quot; &quot;24&quot; &quot;26&quot; &quot;28&quot; &quot;30&quot;
 [16] &quot;32&quot;</code></pre>
@@ -2682,34 +2746,98 @@ vertical-align: -.125em;
 </div>
 <p>Read in the dataset for the lecture but let’s consider that we forgot to specify classes/types, so <code>woj</code> is treated as numeric variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_wrong <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_wrong)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      id woj public   size nace nace_division vacancies
-1  27350  14      1  Large    O            84         2
-2  26705  14      1  Large    O            84         1
-3 257456  24      1  Large    O            84         2
-4 183657  16      1 Medium    O            84         0
-5 200042  18      1 Medium    O            84         0
-6  26050  14      1  Large    R            91         4</code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_wrong <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_wrong)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">woj</th>
+<th style="text-align: right;">public</th>
+<th style="text-align: left;">size</th>
+<th style="text-align: left;">nace</th>
+<th style="text-align: right;">nace_division</th>
+<th style="text-align: right;">vacancies</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">27350</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26705</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">257456</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">183657</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">200042</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">O</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26050</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Load modules</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install statsmodels </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install statsmodels </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Read in the dataset for the lecture and specify column classes (types).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, dtype<span class="op">=</span>{<span class="st">&quot;id&quot;</span>: np.int64, <span class="st">&quot;woj&quot;</span>:<span class="bu">str</span>, <span class="st">&quot;public&quot;</span>:<span class="bu">str</span>,<span class="st">&quot;size&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace_division&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace&quot;</span>: <span class="bu">str</span>})</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, dtype<span class="op">=</span>{<span class="st">&quot;id&quot;</span>: np.int64, <span class="st">&quot;woj&quot;</span>:<span class="bu">str</span>, <span class="st">&quot;public&quot;</span>:<span class="bu">str</span>,<span class="st">&quot;size&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace_division&quot;</span>: <span class="bu">str</span>, <span class="st">&quot;nace&quot;</span>: <span class="bu">str</span>})</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id woj public    size nace nace_division  vacancies
 0   27350  14      1   Large    O            84          2
@@ -2721,8 +2849,8 @@ vertical-align: -.125em;
 </div>
 <p>Read in the dataset for the lecture but let’s consider that we forgot to specify classes/types, so <code>woj</code> is treated as numeric variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_wrong <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_wrong.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_wrong <span class="op">=</span> pd.read_csv(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_wrong.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         id  woj  public    size nace  nace_division  vacancies
 0   27350.0   14       1   Large    O             84          2
@@ -2736,25 +2864,25 @@ vertical-align: -.125em;
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <p>Install modules</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>([<span class="st">&quot;Effects&quot;</span>, <span class="st">&quot;StatsBase&quot;</span>, <span class="st">&quot;CSV&quot;</span>, <span class="st">&quot;CategoricalArrays&quot;</span>, <span class="st">&quot;GLM&quot;</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>([<span class="st">&quot;Effects&quot;</span>, <span class="st">&quot;StatsBase&quot;</span>, <span class="st">&quot;CSV&quot;</span>, <span class="st">&quot;CategoricalArrays&quot;</span>, <span class="st">&quot;GLM&quot;</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load packages</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Effects</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">StatsBase</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CategoricalArrays</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GLM</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Effects</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">StatsBase</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CategoricalArrays</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GLM</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Read in the dataset for the lecture and specify column classes (types).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">read</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, DataFrame, </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>            types <span class="op">=</span> <span class="fu">Dict</span>(<span class="op">:</span>id <span class="op">=&gt;</span> <span class="dt">Int64</span>, <span class="op">:</span>woj<span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>public<span class="op">=&gt;</span> <span class="dt">String</span>, </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                         <span class="op">:</span>size <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace_division <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace <span class="op">=&gt;</span> <span class="dt">String</span>));</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">read</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, DataFrame, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>            types <span class="op">=</span> <span class="fu">Dict</span>(<span class="op">:</span>id <span class="op">=&gt;</span> <span class="dt">Int64</span>, <span class="op">:</span>woj<span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>public<span class="op">=&gt;</span> <span class="dt">String</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                         <span class="op">:</span>size <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace_division <span class="op">=&gt;</span> <span class="dt">String</span>, <span class="op">:</span>nace <span class="op">=&gt;</span> <span class="dt">String</span>));</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5×7 DataFrame
  Row │ id      woj     public  size    nace    nace_division  vacancies
@@ -2769,8 +2897,8 @@ vertical-align: -.125em;
 </div>
 <p>Read in the dataset for the lecture but let’s consider that we forgot to specify classes/types, so <code>woj</code> is treated as numeric variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_wrong<span class="op">=</span>CSV.<span class="fu">read</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, DataFrame);</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df_wrong, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_wrong<span class="op">=</span>CSV.<span class="fu">read</span>(<span class="st">&quot;../data/polish-jvs.csv&quot;</span>, DataFrame);</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df_wrong, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5×7 DataFrame
  Row │ id        woj    public  size     nace     nace_division  vacancies
@@ -2794,15 +2922,15 @@ vertical-align: -.125em;
 \text{vacancies} = \beta_0 + \beta_1\text{woj} + \epsilon.
 \]</span> However, <code>woj</code> is categorical, so this model is incorrect. We should consider the following model with <em>dummy variables</em></p>
 <p><span class="math display">\[
-\text{vacancies} = \beta_0 + \beta_1I(\text{woj=&#39;04&#39;})+ \beta_1I(\text{woj=&#39;06&#39;}) + ... + \beta_1I(\text{woj=&#39;32&#39;}) \epsilon.
+\text{vacancies} = \beta_0 + \beta_1I(\text{woj=&#39;04&#39;})+ \beta_1I(\text{woj=&#39;06&#39;}) + ... + \beta_1I(\text{woj=&#39;32&#39;}) + \epsilon.
 \]</span> Note that code <code>02</code> is missing, as it is the reference level.</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href>R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href>Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href>Julia</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df_wrong)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df_wrong)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2825,8 +2953,8 @@ F-statistic: 6.383 on 1 and 57478 DF,  p-value: 0.01152</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2864,23 +2992,66 @@ F-statistic: 16.94 on 15 and 57464 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>Compare this model with the following summary. Why they are equal? because OLS</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df, <span class="at">FUN =</span> mean)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tab1<span class="sc">$</span>coef_by_hand <span class="ot">&lt;-</span> <span class="fu">with</span>(tab1, vacancies<span class="sc">-</span>vacancies[<span class="dv">1</span>])</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>tab1<span class="sc">$</span>coef <span class="ot">&lt;-</span> <span class="fu">coef</span>(m2)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tab1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  woj vacancies coef_by_hand       coef
-1  02 1.1824617    0.0000000  1.1824617
-2  04 0.5691350   -0.6133268 -0.6133268
-3  06 0.3797599   -0.8027019 -0.8027019
-4  08 0.6352598   -0.5472019 -0.5472019
-5  10 0.8086835   -0.3737783 -0.3737783
-6  12 1.3324675    0.1500058  0.1500058</code></pre>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df, <span class="at">FUN =</span> mean)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>tab1<span class="sc">$</span>coef_by_hand <span class="ot">&lt;-</span> <span class="fu">with</span>(tab1, vacancies<span class="sc">-</span>vacancies[<span class="dv">1</span>])</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>tab1<span class="sc">$</span>coef <span class="ot">&lt;-</span> <span class="fu">coef</span>(model2)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tab1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">woj</th>
+<th style="text-align: right;">vacancies</th>
+<th style="text-align: right;">coef_by_hand</th>
+<th style="text-align: right;">coef</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">02</td>
+<td style="text-align: right;">1.1824617</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">1.1824617</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04</td>
+<td style="text-align: right;">0.5691350</td>
+<td style="text-align: right;">-0.6133268</td>
+<td style="text-align: right;">-0.6133268</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">06</td>
+<td style="text-align: right;">0.3797599</td>
+<td style="text-align: right;">-0.8027019</td>
+<td style="text-align: right;">-0.8027019</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">08</td>
+<td style="text-align: right;">0.6352598</td>
+<td style="text-align: right;">-0.5472019</td>
+<td style="text-align: right;">-0.5472019</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">10</td>
+<td style="text-align: right;">0.8086835</td>
+<td style="text-align: right;">-0.3737783</td>
+<td style="text-align: right;">-0.3737783</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12</td>
+<td style="text-align: right;">1.3324675</td>
+<td style="text-align: right;">0.1500058</td>
+<td style="text-align: right;">0.1500058</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> <span class="fu">relevel</span>(woj, <span class="at">ref =</span> <span class="st">&quot;30&quot;</span>), <span class="at">data =</span> df)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> <span class="fu">relevel</span>(woj, <span class="at">ref =</span> <span class="st">&quot;30&quot;</span>), <span class="at">data =</span> df)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2917,8 +3088,8 @@ F-statistic: 16.94 on 15 and 57464 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df, <span class="at">contrasts =</span> <span class="fu">list</span>(<span class="at">woj =</span> contr.sum))</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> woj, <span class="at">data =</span> df, <span class="at">contrasts =</span> <span class="fu">list</span>(<span class="at">woj =</span> contr.sum))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2954,19 +3125,289 @@ Multiple R-squared:  0.004403,  Adjusted R-squared:  0.004143
 F-statistic: 16.94 on 15 and 57464 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>0.82902 – average of averages over woj</p>
+<p>0.82902 – average of averages</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(tab1<span class="sc">$</span>vacancies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(tab1<span class="sc">$</span>vacancies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8290169</code></pre>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="op">=</span> smf.ols(<span class="st">&quot;vacancies ~ woj&quot;</span>, data <span class="op">=</span> df_wrong).fit()</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model1.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              vacancies   R-squared:                       0.000
+Model:                            OLS   Adj. R-squared:                  0.000
+Method:                 Least Squares   F-statistic:                     6.383
+Date:                Tue, 02 May 2023   Prob (F-statistic):             0.0115
+Time:                        16:54:09   Log-Likelihood:            -2.1271e+05
+No. Observations:               57480   AIC:                         4.254e+05
+Df Residuals:                   57478   BIC:                         4.254e+05
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      1.2083      0.086     14.000      0.000       1.039       1.377
+woj           -0.0113      0.004     -2.526      0.012      -0.020      -0.003
+==============================================================================
+Omnibus:                   168869.532   Durbin-Watson:                   1.933
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):      15482298991.692
+Skew:                          41.458   Prob(JB):                         0.00
+Kurtosis:                    2544.171   Cond. No.                         40.8
+==============================================================================
 
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> smf.ols(<span class="st">&quot;vacancies ~ woj&quot;</span>, data <span class="op">=</span> df).fit()</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model2.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              vacancies   R-squared:                       0.004
+Model:                            OLS   Adj. R-squared:                  0.004
+Method:                 Least Squares   F-statistic:                     16.94
+Date:                Tue, 02 May 2023   Prob (F-statistic):           2.24e-45
+Time:                        16:54:09   Log-Likelihood:            -2.1259e+05
+No. Observations:               57480   AIC:                         4.252e+05
+Df Residuals:                   57464   BIC:                         4.254e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      1.1825      0.148      8.006      0.000       0.893       1.472
+woj[T.04]     -0.6133      0.230     -2.661      0.008      -1.065      -0.162
+woj[T.06]     -0.8027      0.234     -3.436      0.001      -1.261      -0.345
+woj[T.08]     -0.5472      0.261     -2.095      0.036      -1.059      -0.035
+woj[T.10]     -0.3738      0.220     -1.696      0.090      -0.806       0.058
+woj[T.12]      0.1500      0.206      0.728      0.467      -0.254       0.554
+woj[T.14]      1.3701      0.187      7.343      0.000       1.004       1.736
+woj[T.16]     -0.6339      0.265     -2.390      0.017      -1.154      -0.114
+woj[T.18]     -0.7642      0.227     -3.360      0.001      -1.210      -0.318
+woj[T.20]     -0.7127      0.262     -2.717      0.007      -1.227      -0.199
+woj[T.22]     -0.3185      0.218     -1.464      0.143      -0.745       0.108
+woj[T.24]     -0.2606      0.194     -1.342      0.180      -0.641       0.120
+woj[T.26]     -0.7559      0.261     -2.896      0.004      -1.267      -0.244
+woj[T.28]     -0.7545      0.245     -3.073      0.002      -1.236      -0.273
+woj[T.30]     -0.2080      0.201     -1.036      0.300      -0.602       0.185
+woj[T.32]     -0.4298      0.234     -1.835      0.067      -0.889       0.029
+==============================================================================
+Omnibus:                   168875.739   Durbin-Watson:                   1.942
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):      15532739548.286
+Skew:                          41.460   Prob(JB):                         0.00
+Kurtosis:                    2548.311   Cond. No.                         15.6
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="op">=</span> smf.ols(<span class="st">&quot;vacancies ~ C(woj, Treatment(reference=&#39;30&#39;))&quot;</span>, data <span class="op">=</span> df).fit()</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model3.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              vacancies   R-squared:                       0.004
+Model:                            OLS   Adj. R-squared:                  0.004
+Method:                 Least Squares   F-statistic:                     16.94
+Date:                Tue, 02 May 2023   Prob (F-statistic):           2.24e-45
+Time:                        16:54:10   Log-Likelihood:            -2.1259e+05
+No. Observations:               57480   AIC:                         4.252e+05
+Df Residuals:                   57464   BIC:                         4.254e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================================
+                                              coef    std err          t      P&gt;|t|      [0.025      0.975]
+-----------------------------------------------------------------------------------------------------------
+Intercept                                   0.9744      0.136      7.165      0.000       0.708       1.241
+C(woj, Treatment(reference=&#39;30&#39;))[T.02]     0.2080      0.201      1.036      0.300      -0.185       0.602
+C(woj, Treatment(reference=&#39;30&#39;))[T.04]    -0.4053      0.223     -1.816      0.069      -0.843       0.032
+C(woj, Treatment(reference=&#39;30&#39;))[T.06]    -0.5947      0.226     -2.627      0.009      -1.038      -0.151
+C(woj, Treatment(reference=&#39;30&#39;))[T.08]    -0.3392      0.255     -1.332      0.183      -0.838       0.160
+C(woj, Treatment(reference=&#39;30&#39;))[T.10]    -0.1658      0.213     -0.779      0.436      -0.583       0.251
+C(woj, Treatment(reference=&#39;30&#39;))[T.12]     0.3580      0.198      1.809      0.070      -0.030       0.746
+C(woj, Treatment(reference=&#39;30&#39;))[T.14]     1.5781      0.177      8.892      0.000       1.230       1.926
+C(woj, Treatment(reference=&#39;30&#39;))[T.16]    -0.4259      0.259     -1.645      0.100      -0.933       0.082
+C(woj, Treatment(reference=&#39;30&#39;))[T.18]    -0.5562      0.220     -2.528      0.011      -0.987      -0.125
+C(woj, Treatment(reference=&#39;30&#39;))[T.20]    -0.5047      0.256     -1.972      0.049      -1.006      -0.003
+C(woj, Treatment(reference=&#39;30&#39;))[T.22]    -0.1105      0.210     -0.527      0.598      -0.522       0.301
+C(woj, Treatment(reference=&#39;30&#39;))[T.24]    -0.0526      0.186     -0.284      0.777      -0.416       0.311
+C(woj, Treatment(reference=&#39;30&#39;))[T.26]    -0.5479      0.255     -2.152      0.031      -1.047      -0.049
+C(woj, Treatment(reference=&#39;30&#39;))[T.28]    -0.5465      0.239     -2.290      0.022      -1.014      -0.079
+C(woj, Treatment(reference=&#39;30&#39;))[T.32]    -0.2218      0.227     -0.977      0.329      -0.667       0.223
+==============================================================================
+Omnibus:                   168875.739   Durbin-Watson:                   1.942
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):      15532739548.286
+Skew:                          41.460   Prob(JB):                         0.00
+Kurtosis:                    2548.311   Cond. No.                         14.5
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="op">=</span> smf.ols(<span class="st">&quot;vacancies ~ C(woj, Sum)&quot;</span>, data <span class="op">=</span> df).fit()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model4.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              vacancies   R-squared:                       0.004
+Model:                            OLS   Adj. R-squared:                  0.004
+Method:                 Least Squares   F-statistic:                     16.94
+Date:                Tue, 02 May 2023   Prob (F-statistic):           2.24e-45
+Time:                        16:54:11   Log-Likelihood:            -2.1259e+05
+No. Observations:               57480   AIC:                         4.252e+05
+Df Residuals:                   57464   BIC:                         4.254e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+=====================================================================================
+                        coef    std err          t      P&gt;|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------
+Intercept             0.8290      0.044     18.836      0.000       0.743       0.915
+C(woj, Sum)[S.02]     0.3534      0.145      2.438      0.015       0.069       0.638
+C(woj, Sum)[S.04]    -0.2599      0.171     -1.518      0.129      -0.596       0.076
+C(woj, Sum)[S.06]    -0.4493      0.175     -2.568      0.010      -0.792      -0.106
+C(woj, Sum)[S.08]    -0.1938      0.206     -0.940      0.347      -0.598       0.210
+C(woj, Sum)[S.10]    -0.0203      0.159     -0.128      0.898      -0.332       0.292
+C(woj, Sum)[S.12]     0.5035      0.142      3.557      0.000       0.226       0.781
+C(woj, Sum)[S.14]     1.7235      0.115     14.938      0.000       1.497       1.950
+C(woj, Sum)[S.16]    -0.2805      0.211     -1.331      0.183      -0.694       0.133
+C(woj, Sum)[S.18]    -0.4107      0.168     -2.450      0.014      -0.739      -0.082
+C(woj, Sum)[S.20]    -0.3593      0.207     -1.732      0.083      -0.766       0.047
+C(woj, Sum)[S.22]     0.0349      0.156      0.224      0.823      -0.270       0.340
+C(woj, Sum)[S.24]     0.0928      0.126      0.737      0.461      -0.154       0.340
+C(woj, Sum)[S.26]    -0.4025      0.206     -1.953      0.051      -0.806       0.001
+C(woj, Sum)[S.28]    -0.4011      0.189     -2.126      0.033      -0.771      -0.031
+C(woj, Sum)[S.30]     0.1454      0.135      1.080      0.280      -0.118       0.409
+==============================================================================
+Omnibus:                   168875.739   Durbin-Watson:                   1.942
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):      15532739548.286
+Skew:                          41.460   Prob(JB):                         0.00
+Kurtosis:                    2548.311   Cond. No.                         5.45
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(vacancies <span class="op">~</span> woj), df_wrong)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>StatsModels.TableRegressionModel{LinearModel{GLM.LmResp{Vector{Float64}}, GLM.DensePredChol{Float64, CholeskyPivoted{Float64, Matrix{Float64}, Vector{Int64}}}}, Matrix{Float64}}
 
+vacancies ~ 1 + woj
+
+Coefficients:
+─────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)   Lower 95%    Upper 95%
+─────────────────────────────────────────────────────────────────────────────
+(Intercept)   1.20831    0.0863062   14.00    &lt;1e-43   1.03915     1.37747
+woj          -0.0113182  0.00447984  -2.53    0.0115  -0.0200987  -0.00253767
+─────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(vacancies <span class="op">~</span> woj), df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>StatsModels.TableRegressionModel{LinearModel{GLM.LmResp{Vector{Float64}}, GLM.DensePredChol{Float64, CholeskyPivoted{Float64, Matrix{Float64}, Vector{Int64}}}}, Matrix{Float64}}
+
+vacancies ~ 1 + woj
+
+Coefficients:
+──────────────────────────────────────────────────────────────────────────
+                 Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%   Upper 95%
+──────────────────────────────────────────────────────────────────────────
+(Intercept)   1.18246     0.147694   8.01    &lt;1e-14   0.89298    1.47194
+woj: 04      -0.613327    0.23046   -2.66    0.0078  -1.06503   -0.161624
+woj: 06      -0.802702    0.233629  -3.44    0.0006  -1.26062   -0.344787
+woj: 08      -0.547202    0.261163  -2.10    0.0362  -1.05908   -0.0353217
+woj: 10      -0.373778    0.220387  -1.70    0.0899  -0.805738   0.0581814
+woj: 12       0.150006    0.206129   0.73    0.4668  -0.254009   0.554021
+woj: 14       1.37007     0.186583   7.34    &lt;1e-12   1.00437    1.73577
+woj: 16      -0.633911    0.265284  -2.39    0.0169  -1.15387   -0.113952
+woj: 18      -0.764177    0.227421  -3.36    0.0008  -1.20992   -0.318431
+woj: 20      -0.712713    0.262296  -2.72    0.0066  -1.22681   -0.198611
+woj: 22      -0.318522    0.217595  -1.46    0.1432  -0.745008   0.107965
+woj: 24      -0.260641    0.194259  -1.34    0.1797  -0.64139    0.120107
+woj: 26      -0.755898    0.26099   -2.90    0.0038  -1.26744   -0.244356
+woj: 28      -0.754523    0.245496  -3.07    0.0021  -1.2357    -0.273349
+woj: 30      -0.208018    0.200768  -1.04    0.3002  -0.601524   0.185487
+woj: 32      -0.429781    0.234211  -1.84    0.0665  -0.888835   0.0292735
+──────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(vacancies <span class="op">~</span> woj), df, contrasts <span class="op">=</span> <span class="fu">Dict</span>(<span class="op">:</span>woj <span class="op">=&gt;</span> <span class="fu">DummyCoding</span>(base<span class="op">=</span><span class="st">&quot;30&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>StatsModels.TableRegressionModel{LinearModel{GLM.LmResp{Vector{Float64}}, GLM.DensePredChol{Float64, CholeskyPivoted{Float64, Matrix{Float64}, Vector{Int64}}}}, Matrix{Float64}}
+
+vacancies ~ 1 + woj
+
+Coefficients:
+─────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)   Lower 95%    Upper 95%
+─────────────────────────────────────────────────────────────────────────────
+(Intercept)   0.974443     0.135993   7.17    &lt;1e-12   0.707897    1.24099
+woj: 02       0.208018     0.200768   1.04    0.3002  -0.185487    0.601524
+woj: 04      -0.405308     0.223142  -1.82    0.0693  -0.842667    0.0320503
+woj: 06      -0.594684     0.226414  -2.63    0.0086  -1.03846    -0.150912
+woj: 08      -0.339184     0.254728  -1.33    0.1830  -0.838452    0.160085
+woj: 10      -0.16576      0.212723  -0.78    0.4358  -0.582697    0.251177
+woj: 12       0.358024     0.197914   1.81    0.0705  -0.0298875   0.745936
+woj: 14       1.57809      0.177465   8.89    &lt;1e-18   1.23026     1.92592
+woj: 16      -0.425892     0.258952  -1.64    0.1000  -0.93344     0.0816554
+woj: 18      -0.556159     0.220002  -2.53    0.0115  -0.987363   -0.124955
+woj: 20      -0.504694     0.25589   -1.97    0.0486  -1.00624    -0.00314842
+woj: 22      -0.110503     0.209828  -0.53    0.5984  -0.521767    0.300761
+woj: 24      -0.0526231    0.185518  -0.28    0.7767  -0.41624     0.310994
+woj: 26      -0.54788      0.254551  -2.15    0.0314  -1.0468     -0.0489579
+woj: 28      -0.546505     0.23864   -2.29    0.0220  -1.01424    -0.0787695
+woj: 32      -0.221763     0.227014  -0.98    0.3286  -0.66671     0.223185
+─────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(vacancies <span class="op">~</span> woj), df, contrasts <span class="op">=</span> <span class="fu">Dict</span>(<span class="op">:</span>woj <span class="op">=&gt;</span> <span class="fu">EffectsCoding</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>StatsModels.TableRegressionModel{LinearModel{GLM.LmResp{Vector{Float64}}, GLM.DensePredChol{Float64, CholeskyPivoted{Float64, Matrix{Float64}, Vector{Int64}}}}, Matrix{Float64}}
+
+vacancies ~ 1 + woj
+
+Coefficients:
+────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%    Upper 95%
+────────────────────────────────────────────────────────────────────────────
+(Intercept)   0.829017     0.044013  18.84    &lt;1e-78   0.742751   0.915283
+woj: 04      -0.259882     0.17124   -1.52    0.1291  -0.595512   0.0757486
+woj: 06      -0.449257     0.174957  -2.57    0.0102  -0.792174  -0.10634
+woj: 08      -0.193757     0.206229  -0.94    0.3475  -0.597967   0.210453
+woj: 10      -0.0203334    0.159215  -0.13    0.8984  -0.332395   0.291728
+woj: 12       0.503451     0.141522   3.56    0.0004   0.226067   0.780834
+woj: 14       1.72351      0.115377  14.94    &lt;1e-49   1.49737    1.94965
+woj: 16      -0.280466     0.210782  -1.33    0.1833  -0.6936     0.132668
+woj: 18      -0.410733     0.167647  -2.45    0.0143  -0.739321  -0.0821439
+woj: 20      -0.359268     0.207484  -1.73    0.0834  -0.765937   0.0474019
+woj: 22       0.0349233    0.155818   0.22    0.8227  -0.27048    0.340327
+woj: 24       0.0928034    0.125975   0.74    0.4613  -0.154108   0.339715
+woj: 26      -0.402454     0.206038  -1.95    0.0508  -0.80629    0.00138231
+woj: 28      -0.401078     0.18864   -2.13    0.0335  -0.770814  -0.0313423
+woj: 30       0.145427     0.134608   1.08    0.2800  -0.118407   0.40926
+woj: 32      -0.0763361    0.175636  -0.43    0.6638  -0.420584   0.267912
+────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2984,8 +3425,8 @@ F-statistic: 16.94 on 15 and 57464 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <p>Marginal effects</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj<span class="sc">*</span>size <span class="sc">+</span> woj<span class="sc">*</span>public, df)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(vacancies <span class="sc">~</span> woj<span class="sc">*</span>size <span class="sc">+</span> woj<span class="sc">*</span>public, df)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -3071,66 +3512,547 @@ F-statistic: 15.43 on 63 and 57416 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>Calculate <strong>Average Marginal Effects</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(model5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   Term       Contrast Estimate Std. Error       z Pr(&gt;|z|)  2.5 %   97.5 %
- public 1 - 0            -0.601     0.0873  -6.889  &lt; 0.001 -0.772 -0.43023
- size   Medium - Large   -1.666     0.0973 -17.128  &lt; 0.001 -1.857 -1.47525
- size   Small - Large    -1.944     0.1060 -18.351  &lt; 0.001 -2.152 -1.73671
- woj    04 - 02          -0.614     0.2305  -2.665  0.00769 -1.066 -0.16256
- woj    06 - 02          -0.753     0.2345  -3.210  0.00133 -1.212 -0.29319
- woj    08 - 02          -0.443     0.2658  -1.665  0.09590 -0.963  0.07838
- woj    10 - 02          -0.367     0.2197  -1.670  0.09488 -0.797  0.06365
- woj    12 - 02           0.151     0.2059   0.731  0.46477 -0.253  0.55417
- woj    14 - 02           1.234     0.1888   6.538  &lt; 0.001  0.864  1.60406
- woj    16 - 02          -0.536     0.2702  -1.985  0.04713 -1.066 -0.00681
- woj    18 - 02          -0.720     0.2280  -3.157  0.00159 -1.167 -0.27293
- woj    20 - 02          -0.652     0.2663  -2.447  0.01441 -1.173 -0.12964
- woj    22 - 02          -0.347     0.2174  -1.597  0.11025 -0.773  0.07889
- woj    24 - 02          -0.280     0.1942  -1.443  0.14915 -0.661  0.10047
- woj    26 - 02          -0.690     0.2659  -2.593  0.00950 -1.211 -0.16844
- woj    28 - 02          -0.682     0.2476  -2.753  0.00590 -1.167 -0.19643
- woj    30 - 02          -0.190     0.2003  -0.947  0.34389 -0.582  0.20303
- woj    32 - 02          -0.359     0.2339  -1.533  0.12518 -0.817  0.09978
-
-Columns: term, contrast, estimate, std.error, statistic, p.value, conf.low, conf.high </code></pre>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(model5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">public</td>
+<td style="text-align: left;">1 - 0</td>
+<td style="text-align: right;">-0.6013163</td>
+<td style="text-align: right;">0.0872911</td>
+<td style="text-align: right;">-6.8886352</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-0.7724037</td>
+<td style="text-align: right;">-0.4302290</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">size</td>
+<td style="text-align: left;">Medium - Large</td>
+<td style="text-align: right;">-1.6658767</td>
+<td style="text-align: right;">0.0972615</td>
+<td style="text-align: right;">-17.1278117</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-1.8565057</td>
+<td style="text-align: right;">-1.4752476</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">size</td>
+<td style="text-align: left;">Small - Large</td>
+<td style="text-align: right;">-1.9443740</td>
+<td style="text-align: right;">0.1059526</td>
+<td style="text-align: right;">-18.3513562</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-2.1520373</td>
+<td style="text-align: right;">-1.7367107</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">04 - 02</td>
+<td style="text-align: right;">-0.6142941</td>
+<td style="text-align: right;">0.2304801</td>
+<td style="text-align: right;">-2.6652805</td>
+<td style="text-align: right;">0.0076924</td>
+<td style="text-align: right;">-1.0660268</td>
+<td style="text-align: right;">-0.1625614</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">06 - 02</td>
+<td style="text-align: right;">-0.7527352</td>
+<td style="text-align: right;">0.2344642</td>
+<td style="text-align: right;">-3.2104482</td>
+<td style="text-align: right;">0.0013253</td>
+<td style="text-align: right;">-1.2122766</td>
+<td style="text-align: right;">-0.2931938</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">08 - 02</td>
+<td style="text-align: right;">-0.4425090</td>
+<td style="text-align: right;">0.2657649</td>
+<td style="text-align: right;">-1.6650391</td>
+<td style="text-align: right;">0.0959050</td>
+<td style="text-align: right;">-0.9633987</td>
+<td style="text-align: right;">0.0783807</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">10 - 02</td>
+<td style="text-align: right;">-0.3668984</td>
+<td style="text-align: right;">0.2196721</td>
+<td style="text-align: right;">-1.6702093</td>
+<td style="text-align: right;">0.0948780</td>
+<td style="text-align: right;">-0.7974478</td>
+<td style="text-align: right;">0.0636510</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">12 - 02</td>
+<td style="text-align: right;">0.1505445</td>
+<td style="text-align: right;">0.2059368</td>
+<td style="text-align: right;">0.7310228</td>
+<td style="text-align: right;">0.4647652</td>
+<td style="text-align: right;">-0.2530842</td>
+<td style="text-align: right;">0.5541732</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">14 - 02</td>
+<td style="text-align: right;">1.2341035</td>
+<td style="text-align: right;">0.1887590</td>
+<td style="text-align: right;">6.5379857</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0.8641427</td>
+<td style="text-align: right;">1.6040643</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">16 - 02</td>
+<td style="text-align: right;">-0.5363946</td>
+<td style="text-align: right;">0.2702032</td>
+<td style="text-align: right;">-1.9851522</td>
+<td style="text-align: right;">0.0471275</td>
+<td style="text-align: right;">-1.0659832</td>
+<td style="text-align: right;">-0.0068059</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">18 - 02</td>
+<td style="text-align: right;">-0.7197269</td>
+<td style="text-align: right;">0.2279642</td>
+<td style="text-align: right;">-3.1571931</td>
+<td style="text-align: right;">0.0015930</td>
+<td style="text-align: right;">-1.1665284</td>
+<td style="text-align: right;">-0.2729253</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">20 - 02</td>
+<td style="text-align: right;">-0.6515044</td>
+<td style="text-align: right;">0.2662633</td>
+<td style="text-align: right;">-2.4468426</td>
+<td style="text-align: right;">0.0144114</td>
+<td style="text-align: right;">-1.1733709</td>
+<td style="text-align: right;">-0.1296379</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">22 - 02</td>
+<td style="text-align: right;">-0.3471981</td>
+<td style="text-align: right;">0.2173975</td>
+<td style="text-align: right;">-1.5970660</td>
+<td style="text-align: right;">0.1102510</td>
+<td style="text-align: right;">-0.7732894</td>
+<td style="text-align: right;">0.0788931</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">24 - 02</td>
+<td style="text-align: right;">-0.2801028</td>
+<td style="text-align: right;">0.1941738</td>
+<td style="text-align: right;">-1.4425365</td>
+<td style="text-align: right;">0.1491511</td>
+<td style="text-align: right;">-0.6606764</td>
+<td style="text-align: right;">0.1004708</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">26 - 02</td>
+<td style="text-align: right;">-0.6895384</td>
+<td style="text-align: right;">0.2658732</td>
+<td style="text-align: right;">-2.5934854</td>
+<td style="text-align: right;">0.0095009</td>
+<td style="text-align: right;">-1.2106404</td>
+<td style="text-align: right;">-0.1684364</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">28 - 02</td>
+<td style="text-align: right;">-0.6817745</td>
+<td style="text-align: right;">0.2476289</td>
+<td style="text-align: right;">-2.7532108</td>
+<td style="text-align: right;">0.0059014</td>
+<td style="text-align: right;">-1.1671182</td>
+<td style="text-align: right;">-0.1964308</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">30 - 02</td>
+<td style="text-align: right;">-0.1896143</td>
+<td style="text-align: right;">0.2003309</td>
+<td style="text-align: right;">-0.9465054</td>
+<td style="text-align: right;">0.3438909</td>
+<td style="text-align: right;">-0.5822558</td>
+<td style="text-align: right;">0.2030271</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">32 - 02</td>
+<td style="text-align: right;">-0.3586517</td>
+<td style="text-align: right;">0.2338969</td>
+<td style="text-align: right;">-1.5333750</td>
+<td style="text-align: right;">0.1251835</td>
+<td style="text-align: right;">-0.8170813</td>
+<td style="text-align: right;">0.0997779</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <p>Calculate <strong>Marginal Effects at means</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(model5, <span class="at">newdata =</span> <span class="st">&quot;mean&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   Term       Contrast Estimate Std. Error      z Pr(&gt;|z|)  2.5 % 97.5 %
- public 1 - 0            -0.821      0.255  -3.22  0.00129 -1.321 -0.321
- size   Medium - Large   -4.206      0.305 -13.80  &lt; 0.001 -4.804 -3.609
- size   Small - Large    -4.773      0.268 -17.80  &lt; 0.001 -5.299 -4.248
- woj    04 - 02          -1.529      0.387  -3.96  &lt; 0.001 -2.287 -0.772
- woj    06 - 02          -1.888      0.412  -4.59  &lt; 0.001 -2.695 -1.082
- woj    08 - 02          -1.190      0.466  -2.55  0.01073 -2.104 -0.276
- woj    10 - 02          -1.032      0.369  -2.80  0.00516 -1.755 -0.309
- woj    12 - 02           0.428      0.344   1.25  0.21268 -0.245  1.102
- woj    14 - 02           2.288      0.309   7.42  &lt; 0.001  1.684  2.893
- woj    16 - 02          -1.409      0.470  -3.00  0.00269 -2.329 -0.489
- woj    18 - 02          -1.795      0.390  -4.60  &lt; 0.001 -2.559 -1.030
- woj    20 - 02          -1.628      0.462  -3.52  &lt; 0.001 -2.533 -0.722
- woj    22 - 02          -0.983      0.365  -2.70  0.00699 -1.698 -0.269
- woj    24 - 02          -0.928      0.322  -2.88  0.00400 -1.560 -0.296
- woj    26 - 02          -1.714      0.462  -3.71  &lt; 0.001 -2.619 -0.809
- woj    28 - 02          -1.645      0.441  -3.73  &lt; 0.001 -2.510 -0.781
- woj    30 - 02          -0.594      0.337  -1.76  0.07819 -1.255  0.067
- woj    32 - 02          -1.034      0.418  -2.47  0.01336 -1.853 -0.215
-
-Columns: term, contrast, estimate, std.error, statistic, p.value, conf.low, conf.high </code></pre>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(model5, <span class="at">newdata =</span> <span class="st">&quot;mean&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">public</td>
+<td style="text-align: left;">1 - 0</td>
+<td style="text-align: right;">-0.8209876</td>
+<td style="text-align: right;">0.2550251</td>
+<td style="text-align: right;">-3.219243</td>
+<td style="text-align: right;">0.0012853</td>
+<td style="text-align: right;">-1.3208276</td>
+<td style="text-align: right;">-0.3211476</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">size</td>
+<td style="text-align: left;">Medium - Large</td>
+<td style="text-align: right;">-4.2061433</td>
+<td style="text-align: right;">0.3048260</td>
+<td style="text-align: right;">-13.798505</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-4.8035913</td>
+<td style="text-align: right;">-3.6086953</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">size</td>
+<td style="text-align: left;">Small - Large</td>
+<td style="text-align: right;">-4.7734290</td>
+<td style="text-align: right;">0.2681633</td>
+<td style="text-align: right;">-17.800453</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-5.2990195</td>
+<td style="text-align: right;">-4.2478385</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">04 - 02</td>
+<td style="text-align: right;">-1.5293965</td>
+<td style="text-align: right;">0.3865619</td>
+<td style="text-align: right;">-3.956408</td>
+<td style="text-align: right;">0.0000761</td>
+<td style="text-align: right;">-2.2870439</td>
+<td style="text-align: right;">-0.7717492</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">06 - 02</td>
+<td style="text-align: right;">-1.8881903</td>
+<td style="text-align: right;">0.4115449</td>
+<td style="text-align: right;">-4.588054</td>
+<td style="text-align: right;">0.0000045</td>
+<td style="text-align: right;">-2.6948035</td>
+<td style="text-align: right;">-1.0815772</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">08 - 02</td>
+<td style="text-align: right;">-1.1901410</td>
+<td style="text-align: right;">0.4664652</td>
+<td style="text-align: right;">-2.551404</td>
+<td style="text-align: right;">0.0107290</td>
+<td style="text-align: right;">-2.1043959</td>
+<td style="text-align: right;">-0.2758861</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">10 - 02</td>
+<td style="text-align: right;">-1.0320552</td>
+<td style="text-align: right;">0.3689779</td>
+<td style="text-align: right;">-2.797065</td>
+<td style="text-align: right;">0.0051569</td>
+<td style="text-align: right;">-1.7552385</td>
+<td style="text-align: right;">-0.3088718</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">12 - 02</td>
+<td style="text-align: right;">0.4281695</td>
+<td style="text-align: right;">0.3435728</td>
+<td style="text-align: right;">1.246226</td>
+<td style="text-align: right;">0.2126813</td>
+<td style="text-align: right;">-0.2452209</td>
+<td style="text-align: right;">1.1015599</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">14 - 02</td>
+<td style="text-align: right;">2.2884731</td>
+<td style="text-align: right;">0.3085181</td>
+<td style="text-align: right;">7.417630</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">1.6837887</td>
+<td style="text-align: right;">2.8931575</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">16 - 02</td>
+<td style="text-align: right;">-1.4091333</td>
+<td style="text-align: right;">0.4695460</td>
+<td style="text-align: right;">-3.001055</td>
+<td style="text-align: right;">0.0026905</td>
+<td style="text-align: right;">-2.3294266</td>
+<td style="text-align: right;">-0.4888400</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">18 - 02</td>
+<td style="text-align: right;">-1.7948085</td>
+<td style="text-align: right;">0.3900794</td>
+<td style="text-align: right;">-4.601136</td>
+<td style="text-align: right;">0.0000042</td>
+<td style="text-align: right;">-2.5593501</td>
+<td style="text-align: right;">-1.0302669</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">20 - 02</td>
+<td style="text-align: right;">-1.6275334</td>
+<td style="text-align: right;">0.4617880</td>
+<td style="text-align: right;">-3.524417</td>
+<td style="text-align: right;">0.0004244</td>
+<td style="text-align: right;">-2.5326212</td>
+<td style="text-align: right;">-0.7224456</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">22 - 02</td>
+<td style="text-align: right;">-0.9831976</td>
+<td style="text-align: right;">0.3645045</td>
+<td style="text-align: right;">-2.697354</td>
+<td style="text-align: right;">0.0069893</td>
+<td style="text-align: right;">-1.6976133</td>
+<td style="text-align: right;">-0.2687819</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">24 - 02</td>
+<td style="text-align: right;">-0.9278033</td>
+<td style="text-align: right;">0.3223480</td>
+<td style="text-align: right;">-2.878266</td>
+<td style="text-align: right;">0.0039987</td>
+<td style="text-align: right;">-1.5595939</td>
+<td style="text-align: right;">-0.2960128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">26 - 02</td>
+<td style="text-align: right;">-1.7141752</td>
+<td style="text-align: right;">0.4617887</td>
+<td style="text-align: right;">-3.712033</td>
+<td style="text-align: right;">0.0002056</td>
+<td style="text-align: right;">-2.6192645</td>
+<td style="text-align: right;">-0.8090858</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">28 - 02</td>
+<td style="text-align: right;">-1.6452520</td>
+<td style="text-align: right;">0.4409999</td>
+<td style="text-align: right;">-3.730731</td>
+<td style="text-align: right;">0.0001909</td>
+<td style="text-align: right;">-2.5095959</td>
+<td style="text-align: right;">-0.7809081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">30 - 02</td>
+<td style="text-align: right;">-0.5940944</td>
+<td style="text-align: right;">0.3373040</td>
+<td style="text-align: right;">-1.761302</td>
+<td style="text-align: right;">0.0781873</td>
+<td style="text-align: right;">-1.2551981</td>
+<td style="text-align: right;">0.0670094</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">woj</td>
+<td style="text-align: left;">32 - 02</td>
+<td style="text-align: right;">-1.0338152</td>
+<td style="text-align: right;">0.4178836</td>
+<td style="text-align: right;">-2.473931</td>
+<td style="text-align: right;">0.0133636</td>
+<td style="text-align: right;">-1.8528520</td>
+<td style="text-align: right;">-0.2147784</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-
+<p>Marginal effects are not implemented for <code>ols</code> in <code>statsmodels</code> module.</p>
 </div>
 <div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>model5 <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(vacancies <span class="op">~</span> woj<span class="op">*</span>size <span class="op">+</span> woj<span class="op">*</span>public), df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>StatsModels.TableRegressionModel{LinearModel{GLM.LmResp{Vector{Float64}}, GLM.DensePredChol{Float64, CholeskyPivoted{Float64, Matrix{Float64}, Vector{Int64}}}}, Matrix{Float64}}
 
+vacancies ~ 1 + woj + size + public + woj &amp; size + woj &amp; public
+
+Coefficients:
+──────────────────────────────────────────────────────────────────────────────────────
+                            Coef.  Std. Error      t  Pr(&gt;|t|)   Lower 95%   Upper 95%
+──────────────────────────────────────────────────────────────────────────────────────
+(Intercept)              2.6912      0.248811  10.82    &lt;1e-26   2.20353     3.17887
+woj: 04                 -1.5294      0.386562  -3.96    &lt;1e-04  -2.28706    -0.771733
+woj: 06                 -1.88819     0.411545  -4.59    &lt;1e-05  -2.69482    -1.08156
+woj: 08                 -1.19014     0.466465  -2.55    0.0107  -2.10442    -0.275867
+woj: 10                 -1.03206     0.368978  -2.80    0.0052  -1.75525    -0.308857
+woj: 12                  0.428169    0.343573   1.25    0.2127  -0.245235    1.10157
+woj: 14                  2.28847     0.308518   7.42    &lt;1e-12   1.68378     2.89317
+woj: 16                 -1.40913     0.469546  -3.00    0.0027  -2.32945    -0.488821
+woj: 18                 -1.79481     0.390079  -4.60    &lt;1e-05  -2.55937    -1.03025
+woj: 20                 -1.62753     0.461788  -3.52    0.0004  -2.53264    -0.722427
+woj: 22                 -0.983198    0.364504  -2.70    0.0070  -1.69763    -0.268767
+woj: 24                 -0.927803    0.322348  -2.88    0.0040  -1.55961    -0.295999
+woj: 26                 -1.71418     0.461789  -3.71    0.0002  -2.61928    -0.809067
+woj: 28                 -1.64525     0.441     -3.73    0.0002  -2.50961    -0.78089
+woj: 30                 -0.594094    0.337304  -1.76    0.0782  -1.25521     0.0670233
+woj: 32                 -1.03382     0.417884  -2.47    0.0134  -1.85287    -0.214761
+size: Medium            -2.05306     0.361437  -5.68    &lt;1e-07  -2.76148    -1.34465
+size: Small             -2.39146     0.36693   -6.52    &lt;1e-10  -3.11065    -1.67228
+public: 1               -1.12815     0.319089  -3.54    0.0004  -1.75357    -0.502732
+woj: 04 &amp; size: Medium   1.1603      0.545054   2.13    0.0333   0.0919886   2.22861
+woj: 06 &amp; size: Medium   1.41385     0.55427    2.55    0.0107   0.327475    2.50022
+woj: 08 &amp; size: Medium   0.99797     0.596383   1.67    0.0943  -0.170945    2.16688
+woj: 10 &amp; size: Medium   0.996749    0.52469    1.90    0.0575  -0.0316465   2.02515
+woj: 12 &amp; size: Medium  -0.364731    0.500298  -0.73    0.4660  -1.34532     0.615856
+woj: 14 &amp; size: Medium  -2.15308     0.472816  -4.55    &lt;1e-05  -3.0798     -1.22636
+woj: 16 &amp; size: Medium   1.09978     0.603667   1.82    0.0685  -0.0834126   2.28297
+woj: 18 &amp; size: Medium   1.42124     0.534254   2.66    0.0078   0.374097    2.46838
+woj: 20 &amp; size: Medium   1.3187      0.599597   2.20    0.0279   0.143488    2.49391
+woj: 22 &amp; size: Medium   0.723055    0.524511   1.38    0.1680  -0.304989    1.7511
+woj: 24 &amp; size: Medium   0.634247    0.473766   1.34    0.1807  -0.294337    1.56283
+woj: 26 &amp; size: Medium   1.40423     0.597106   2.35    0.0187   0.233894    2.57456
+woj: 28 &amp; size: Medium   1.30104     0.572544   2.27    0.0231   0.178854    2.42323
+woj: 30 &amp; size: Medium   0.455186    0.486425   0.94    0.3494  -0.49821     1.40858
+woj: 32 &amp; size: Medium   0.730675    0.556554   1.31    0.1892  -0.360174    1.82152
+woj: 04 &amp; size: Small    1.38937     0.605685   2.29    0.0218   0.202223    2.57651
+woj: 06 &amp; size: Small    1.64261     0.595782   2.76    0.0058   0.474876    2.81035
+woj: 08 &amp; size: Small    1.15956     0.720375   1.61    0.1075  -0.252376    2.5715
+woj: 10 &amp; size: Small    0.937206    0.563888   1.66    0.0965  -0.168018    2.04243
+woj: 12 &amp; size: Small   -0.426226    0.510827  -0.83    0.4041  -1.42745     0.574998
+woj: 14 &amp; size: Small   -2.38197     0.454477  -5.24    &lt;1e-06  -3.27275    -1.49119
+woj: 16 &amp; size: Small    1.26176     0.729256   1.73    0.0836  -0.167584    2.69111
+woj: 18 &amp; size: Small    1.62016     0.588538   2.75    0.0059   0.466621    2.7737
+woj: 20 &amp; size: Small    1.49478     0.72195    2.07    0.0384   0.0797574   2.90981
+woj: 22 &amp; size: Small    0.859949    0.557157   1.54    0.1227  -0.232081    1.95198
+woj: 24 &amp; size: Small    0.766248    0.485651   1.58    0.1146  -0.185629    1.71813
+woj: 26 &amp; size: Small    1.60033     0.716656   2.23    0.0255   0.195678    3.00498
+woj: 28 &amp; size: Small    1.51236     0.655345   2.31    0.0210   0.227882    2.79684
+woj: 30 &amp; size: Small    0.462182    0.501079   0.92    0.3563  -0.519936    1.4443
+woj: 32 &amp; size: Small    0.848754    0.6108     1.39    0.1647  -0.348418    2.04593
+woj: 04 &amp; public: 1      0.75029     0.487503   1.54    0.1238  -0.205218    1.7058
+woj: 06 &amp; public: 1      1.00481     0.489591   2.05    0.0401   0.0452041   1.96441
+woj: 08 &amp; public: 1      0.55639     0.548908   1.01    0.3108  -0.519473    1.63225
+woj: 10 &amp; public: 1      0.467755    0.470441   0.99    0.3201  -0.454312    1.38982
+woj: 12 &amp; public: 1     -0.214209    0.447179  -0.48    0.6319  -1.09068     0.662264
+woj: 14 &amp; public: 1      0.307161    0.40848    0.75    0.4521  -0.493462    1.10778
+woj: 16 &amp; public: 1      0.762201    0.554519   1.37    0.1693  -0.324658    1.84906
+woj: 18 &amp; public: 1      0.842037    0.475559   1.77    0.0766  -0.0900611   1.77413
+woj: 20 &amp; public: 1      0.725813    0.547102   1.33    0.1846  -0.34651     1.79814
+woj: 22 &amp; public: 1      0.657927    0.474699   1.39    0.1658  -0.272487    1.58834
+woj: 24 &amp; public: 1      0.82427     0.422454   1.95    0.0510  -0.003742    1.65228
+woj: 26 &amp; public: 1      0.725603    0.541985   1.34    0.1806  -0.336691    1.7879
+woj: 28 &amp; public: 1      0.693145    0.517502   1.34    0.1804  -0.321162    1.70745
+woj: 30 &amp; public: 1      0.47725     0.434099   1.10    0.2716  -0.373586    1.32809
+woj: 32 &amp; public: 1      0.770143    0.506243   1.52    0.1282  -0.222096    1.76238
+──────────────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+<p><code>Effects.jl</code> returns marginal effects for each level separaterly, not as deviations from the reference level.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vcat</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">effects</span>(<span class="fu">Dict</span>(<span class="op">:</span>woj <span class="op">=&gt;</span> <span class="fu">sort</span>(<span class="fu">unique</span>(df.woj))), model5),</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">effects</span>(<span class="fu">Dict</span>(<span class="op">:</span>public <span class="op">=&gt;</span> <span class="fu">sort</span>(<span class="fu">unique</span>(df.public))), model5),</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">effects</span>(<span class="fu">Dict</span>(<span class="op">:</span>size <span class="op">=&gt;</span> <span class="fu">sort</span>(<span class="fu">unique</span>(df.size))), model5), </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  cols <span class="op">=</span> <span class="op">:</span>union</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>21×7 DataFrame
+ Row │ woj      vacancies   err        lower      upper      public   size
+     │ String?  Float64     Float64    Float64    Float64    String?  String?
+─────┼────────────────────────────────────────────────────────────────────────
+   1 │ 02        1.15759    0.147528    1.01006   1.30512    missing  missing
+   2 │ 04        0.543294   0.177078    0.366217  0.720372   missing  missing
+   3 │ 06        0.404853   0.182233    0.22262   0.587086   missing  missing
+   4 │ 08        0.715079   0.221057    0.494022  0.936137   missing  missing
+   5 │ 10        0.79069    0.162761    0.627929  0.953451   missing  missing
+   6 │ 12        1.30813    0.143685    1.16445   1.45182    missing  missing
+   7 │ 14        2.39169    0.117751    2.27394   2.50944    missing  missing
+   8 │ 16        0.621194   0.226374    0.39482   0.847568   missing  missing
+  ⋮  │    ⋮         ⋮           ⋮          ⋮          ⋮         ⋮        ⋮
+  15 │ 30        0.967974   0.135528    0.832446  1.1035     missing  missing
+  16 │ 32        0.798937   0.181503    0.617434  0.980439   missing  missing
+  17 │ missing   1.20739    0.0513061   1.15609   1.2587     0        missing
+  18 │ missing   0.606079   0.0699462   0.536132  0.676025   1        missing
+  19 │ missing   1.91825    0.0589361   1.85931   1.97718    missing  Large
+  20 │ missing   0.25237    0.0773898   0.17498   0.32976    missing  Medium
+  21 │ missing  -0.0261271  0.0871663  -0.113293  0.0610392  missing  Small
+                                                                6 rows omitted</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

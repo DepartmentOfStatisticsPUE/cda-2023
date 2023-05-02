@@ -5,6 +5,7 @@ format:
     self-contained: true
     table-of-contents: true
     number-sections: true
+    df-print: kable
 editor: visual
 execute: 
   eval: true
@@ -137,7 +138,7 @@ However, `woj` is categorical, so this model is incorrect. We should consider th
 
 
 $$
-\text{vacancies} = \beta_0 + \beta_1I(\text{woj='04'})+ \beta_1I(\text{woj='06'}) + ... + \beta_1I(\text{woj='32'}) \epsilon.
+\text{vacancies} = \beta_0 + \beta_1I(\text{woj='04'})+ \beta_1I(\text{woj='06'}) + ... + \beta_1I(\text{woj='32'}) + \epsilon.
 $$
 Note that code `02` is missing, as it is the reference level.
 
@@ -145,13 +146,13 @@ Note that code `02` is missing, as it is the reference level.
 ## R
 
 ```{r}
-m1 <- lm(vacancies ~ woj, data = df_wrong)
-summary(m1)
+model1 <- lm(vacancies ~ woj, data = df_wrong)
+summary(model1)
 ```
 
 ```{r}
-m2 <- lm(vacancies ~ woj, data = df)
-summary(m2)
+model2 <- lm(vacancies ~ woj, data = df)
+summary(model2)
 ```
 
 Compare this model with the following summary. Why they are equal? because OLS 
@@ -159,12 +160,12 @@ Compare this model with the following summary. Why they are equal? because OLS
 ```{r}
 tab1 <- aggregate(vacancies ~ woj, data = df, FUN = mean)
 tab1$coef_by_hand <- with(tab1, vacancies-vacancies[1])
-tab1$coef <- coef(m2)
+tab1$coef <- coef(model2)
 head(tab1)
 ```
 ```{r}
-m3 <- lm(vacancies ~ relevel(woj, ref = "30"), data = df)
-summary(m3)
+model3 <- lm(vacancies ~ relevel(woj, ref = "30"), data = df)
+summary(model3)
 ```
 
 ```{r}
@@ -172,7 +173,7 @@ model4 <- lm(formula = vacancies ~ woj, data = df, contrasts = list(woj = contr.
 summary(model4)
 ```
 
-0.82902 -- average of averages over woj
+0.82902 -- average of averages
 
 ```{r}
 mean(tab1$vacancies)
@@ -180,7 +181,42 @@ mean(tab1$vacancies)
 
 ## Python
 
+```{python}
+model1 = smf.ols("vacancies ~ woj", data = df_wrong).fit()
+print(model1.summary())
+```
+
+```{python}
+model2 = smf.ols("vacancies ~ woj", data = df).fit()
+print(model2.summary())
+```
+
+```{python}
+model3 = smf.ols("vacancies ~ C(woj, Treatment(reference='30'))", data = df).fit()
+print(model3.summary())
+```
+
+```{python}
+model4 = smf.ols("vacancies ~ C(woj, Sum)", data = df).fit()
+print(model4.summary())
+```
+
+
 ## Julia
+
+```{julia}
+model1 = lm(@formula(vacancies ~ woj), df_wrong)
+```
+```{julia}
+model2 = lm(@formula(vacancies ~ woj), df)
+```
+
+```{julia}
+model3 = lm(@formula(vacancies ~ woj), df, contrasts = Dict(:woj => DummyCoding(base="30")))
+```
+```{julia}
+model4 = lm(@formula(vacancies ~ woj), df, contrasts = Dict(:woj => EffectsCoding()))
+```
 
 :::
 
@@ -218,7 +254,24 @@ avg_slopes(model5, newdata = "mean")
 
 ## Python
 
+Marginal effects are not implemented for `ols` in `statsmodels` module.
+
 ## Julia
+
+```{julia}
+model5 = lm(@formula(vacancies ~ woj*size + woj*public), df)
+```
+
+`Effects.jl` returns marginal effects for each level separaterly, not as deviations from the reference level.
+
+```{julia}
+vcat(
+  effects(Dict(:woj => sort(unique(df.woj))), model5),
+  effects(Dict(:public => sort(unique(df.public))), model5),
+  effects(Dict(:size => sort(unique(df.size))), model5), 
+  cols = :union
+)
+```
 
 :::
 

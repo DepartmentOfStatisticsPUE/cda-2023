@@ -5,6 +5,7 @@ format:
     self-contained: true
     table-of-contents: true
     number-sections: true
+    df-print: kable
 editor: visual
 execute: 
   eval: true
