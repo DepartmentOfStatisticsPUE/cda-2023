@@ -159,7 +159,19 @@ Interpretation of `1.13`:
 
 ## Python
 
+```{python}
+df["has_vacancy"] = np.where(df["vacancies"] > 0, True, False)
+df["public"]=df["public"].astype("category")
+mod1 = smf.glm(formula="has_vacancy ~ public", data=df, family=sm.families.Binomial()).fit()
+print(mod1.summary())
+```
+
 ## Julia
+
+```{julia}
+df.has_vacancy = ifelse.(df.vacancies .> 0, true, false);
+m1 = glm(@formula(has_vacancy ~ public), df, Binomial())
+```
 
 :::
 
@@ -221,7 +233,16 @@ car::Anova(model3, type = 2) |> broom::tidy()
 
 ## Python
 
+```{python}
+mod3 = smf.glm(formula="has_vacancy ~ public + size + nace", data=df, family=sm.families.Binomial()).fit()
+print(mod3.summary())
+```
+
 ## Julia
+
+```{julia}
+m3 = glm(@formula(has_vacancy ~ public + size + nace), df, Binomial())
+```
 
 :::
 

@@ -12,9 +12,10 @@
     + Simpson's paradox [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/04-simpson-paradox.html)]
     + Contingency tables and Cramer's V [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/05-ctables.html)]
 5. Categorical data in regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/06-linreg.html)]
-6. Generalized linear models 
-  -- Logistic regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/07-glm-lr.html)]
-  -- Count regression 
+6. Generalized linear models:
+
+    + Logistic regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/07-glm-lr.html)]
+   + Count regression 
 
 ## Required packages / modules
 
