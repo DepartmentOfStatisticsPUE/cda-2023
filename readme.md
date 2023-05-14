@@ -15,7 +15,7 @@
 6. Generalized linear models:
 
     + Logistic regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/07-glm-lr.html)]
-   + Count regression 
+   + Poisson and Negative binomial regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/08-glm-count.html)]
 
 ## Required packages / modules
 
@@ -25,6 +25,7 @@
     - `vcd`, `fitdistrplus`
     - `marginaleffects`, `modelsummary` 
     - `car`
+    - `see`, `performance`, `patchwork`
 -   Python:
     -   `scipy`, `numpy`, `pandas`
     - `pingouin`, `matplotlib`, `statsmodels`
@@ -34,6 +35,7 @@
     - `HypothesisTests.jl`, `StatsBase.jl`
     - `FreqTables.jl`, `CSV.jl`
     - `Effects.jl`
+    - `GLM.jl`
 
 
 ## Description of the data
