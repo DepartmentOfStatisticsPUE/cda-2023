@@ -128,6 +128,14 @@ Interpretation:
 
 ## Python
 
+
+```{python}
+m1 = smf.glm(formula="vacancies ~ size + public + woj", data=df, family=sm.families.Poisson()).fit()
+print(m1.summary())
+```
+
+QuasiPoisson is Negative Binomial type 1 and can be fitted using `statsmodels.discrete.discrete_model.NegativeBinomial(loglike_method="nb2")`
+
 ## Julia
 
 :::
@@ -166,6 +174,11 @@ Interpretation (the same as for Poisson regression):
 
 
 ## Python
+
+```{python}
+m3 = smf.glm(formula="vacancies ~ size + public + woj", data=df, family=sm.families.NegativeBinomial()).fit()
+print(m3.summary())
+```
 
 ## Julia
 
