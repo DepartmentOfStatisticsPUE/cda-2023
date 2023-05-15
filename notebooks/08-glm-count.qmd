@@ -109,7 +109,7 @@ m2 <- glm(vacancies ~ size + public + woj, data = df, family = quasipoisson())
 summary(m2)
 ```
 
-Dispersion parameter $\psi = 38.06172$ which can be calculated based on `m1` model:
+Dispersion parameter $\phi = 38.06172$ which can be calculated based on `m1` model:
 
 ```{r}
 pearson_r <- residuals(m1, type = "pearson")
