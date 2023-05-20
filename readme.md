@@ -16,6 +16,7 @@
 
     + Logistic regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/07-glm-lr.html)]
    + Poisson and Negative binomial regression [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/08-glm-count.html)]
+   + Zero-inflated Poisson (ZIP) and zero-inflated negative binomial (ZINB) [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/09-zip-zinb.html)]
 
 ## Required packages / modules
 
