@@ -14,7 +14,7 @@ execute:
 ---
 
 ```{r setup, echo = FALSE}
-#JuliaCall::julia_setup(JULIA_HOME = #"/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
 knitr::opts_chunk$set(engine.path = list(
   python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
   julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
@@ -113,6 +113,10 @@ m1 <- pscl::zeroinfl(formula = vacancies ~ size + public,
 
 ```{r}
 summary(m1)
+```
+
+```{r}
+zitest(m1)
 ```
 
 ```{r}

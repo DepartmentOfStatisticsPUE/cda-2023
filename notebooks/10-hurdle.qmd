@@ -1,0 +1,159 @@
+---
+title: "Generalized linear regression: Hurdle"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: visual
+execute: 
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r setup, echo = FALSE, eval = FALSE}
+#JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+knitr::opts_chunk$set(engine.path = list(
+  python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10"
+  #julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+))
+```
+
+# Setup
+
+::: panel-tabset
+## R
+
+```{r, eval = F}
+install.packages("pscl")
+install.packages("countreg", repos="http://R-Forge.R-project.org")
+```
+
+```{r}
+library(MASS) ## glm.nb
+library(countreg)
+library(pscl)
+library(modelsummary)
+library(boot)
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{r}
+df <- read.csv("../data/polish-jvs.csv", colClasses = c("character", "factor", rep("character", 4), "numeric"))
+head(df)
+```
+
+## Python
+
+Load modules
+
+```{bash, eval = F}
+!pip install statsmodels 
+```
+
+```{python loading, eval = F}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{python reading, eval = F}
+df = pd.read_csv("../data/polish-jvs.csv", dtype={"id": np.int64, "woj":str, "public":str,"size": str, "nace_division": str, "nace": str})
+df.head()
+```
+
+## Julia
+
+```{julia, eval = F}
+using Pkg
+Pkg.add(["Effects", "StatsBase", "CSV", "CategoricalArrays", "GLM"])
+```
+
+Load packages
+
+```{julia, eval = F}
+using Effects
+using StatsBase
+using CSV
+using CategoricalArrays
+using GLM
+using Statistics
+using DataFrames
+```
+
+Read in the dataset for the lecture and specify column classes (types).
+
+```{julia, eval = F}
+df=CSV.read("../data/polish-jvs.csv", DataFrame, 
+            types = Dict(:id => Int64, :woj=> String, :public=> String, 
+                         :size => String, :nace_division => String, :nace => String));
+first(df, 5)
+```
+:::
+
+# Hurdle Poisson
+
+::: panel-tabset
+## R
+
+```{r}
+m1 <- pscl::hurdle(formula = vacancies ~ size + public,
+                     dist = "poisson",
+                     link = "logit",
+                     data = df)
+```
+
+```{r name-error}
+summary(m1)
+```
+
+## Python
+
+## Julia
+:::
+
+# Zero-inflated Negative Binomial (ZINB)
+
+::: panel-tabset
+## R
+
+```{r}
+m2 <- pscl::hurdle(formula = vacancies ~ size + public,
+                     dist = "negbin",
+                     link = "logit",
+                     data = df)
+```
+
+```{r}
+summary(m2)
+```
+
+```{r}
+BIC(m1, m2)
+```
+
+```{r}
+m3 <- pscl::zeroinfl(formula = vacancies ~ size + public,
+                     dist = "negbin",
+                     link = "logit",
+                     data = df)
+```
+
+```{r}
+BIC(m2,m3)
+```
+
+```{r}
+modelsummary(list("HurdleNB"=m2, "ZINB"=m3))
+```
+
+## Python
+
+## Julia
+:::
