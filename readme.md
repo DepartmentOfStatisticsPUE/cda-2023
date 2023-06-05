@@ -22,7 +22,7 @@
 ## Case study
 
 - case study [task description](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/case-study/case-study.html)
-- [dataset](data/school-absence-for-lecture.xlsx)
+- [dataset](case-study/school-absence-for-lecture.xlsx)
 
 ## Required packages / modules
 
