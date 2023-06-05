@@ -24,7 +24,7 @@ The aim of the case study is to analyse the explanation days of absenteeism (`da
 
 
 ```{r}
-df <- read_excel("../data/school-absence-for-lecture.xlsx")
+df <- read_excel("school-absence-for-lecture.xlsx")
 head(df)
 ```
 
