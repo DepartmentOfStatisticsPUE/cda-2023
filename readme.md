@@ -19,7 +19,11 @@
    + Zero-inflated Poisson (ZIP) and zero-inflated negative binomial (ZINB) [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/09-zip-zinb.html)]
    + Hurdle Poisson (HP) and Hurdle negative binomial [[code for/from lecture](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/notebooks/10-hurdle.html)]
    
-   
+## Case study
+
+- case study [task description](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/case-study/case-study.html)
+- [dataset](data/school-absence-for-lecture.xlsx)
+
 ## Required packages / modules
 
 -   R:
