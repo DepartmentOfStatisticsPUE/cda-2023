@@ -24,6 +24,10 @@
 - case study [task description](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/case-study/case-study.html)
 - [dataset](case-study/school-absence-for-lecture.xlsx)
 
+## Example final test
+
+[Here](https://htmlpreview.github.io/?https://github.com/DepartmentOfStatisticsPUE/cda-2023/blob/main/example-test/example-test.html) is an example of the final test.
+
 ## Required packages / modules
 
 -   R:
