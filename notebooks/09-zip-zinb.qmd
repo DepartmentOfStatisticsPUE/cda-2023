@@ -14,10 +14,10 @@ execute:
 ---
 
 ```{r setup, echo = FALSE}
-JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
+#JuliaCall::julia_setup(JULIA_HOME = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/")
 knitr::opts_chunk$set(engine.path = list(
   python = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
-  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/"
+  julia = "/Applications/Julia-1.9.app/Contents/Resources/julia/bin/julia"
 ))
 ```
 
@@ -55,6 +55,7 @@ Load modules
 ```
 
 ```{python}
+from patsy import dmatrices
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
@@ -116,14 +117,19 @@ summary(m1)
 ```
 
 ```{r}
-zitest(m1)
-```
-
-```{r}
 rootogram(m1)
 ```
 
 ## Python
+
+```{python}
+y, x = dmatrices("vacancies ~ size + public", df, return_type='dataframe')
+```
+
+```{python}
+m1 = sm.ZeroInflatedPoisson(endog=y, exog=x, exog_infl=x, inflation='logit').fit(maxiter = 100)
+print(m1.summary())
+```
 
 ## Julia
 
@@ -156,6 +162,10 @@ BIC(m1, m2)
 
 ## Python
 
+```{python}
+m2 = sm.ZeroInflatedNegativeBinomialP(endog=y, exog=x, exog_infl=x, inflation='logit').fit(maxiter = 500)
+print(m2.summary())
+```
 ## Julia
 
 :::
