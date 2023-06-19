@@ -2737,10 +2737,18 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install statsmodels </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> patsy <span class="im">import</span> dmatrices</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">## this works with statsmodels &gt;= 0.14.0  </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># from statsmodels.discrete import (</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     TruncatedLFPoisson,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     TruncatedLFNegativeBinomialP,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     _RCensoredPoisson,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     HurdleCountModel,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Read in the dataset for the lecture and specify column classes (types).</p>
 <div class="cell">
@@ -2782,44 +2790,530 @@ vertical-align: -.125em;
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">hurdle</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="do">## vacancies ~ zero-truncated Poisson distribution</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>, <span class="do">## P(Y &gt; 0 | x) | w oneinf P(Y = 0)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-pscl::hurdle(formula = vacancies ~ size + public, data = df, dist = &quot;poisson&quot;, 
-    link = &quot;logit&quot;)
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m1a <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">zeroinfl</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">&quot;ZIP&quot;</span><span class="ot">=</span>m1a, <span class="st">&quot;HP&quot;</span><span class="ot">=</span>m1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
 
-Pearson residuals:
-     Min       1Q   Median       3Q      Max 
- -0.4513  -0.4205  -0.2696  -0.1969 320.7696 
-
-Count model coefficients (truncated poisson with log link):
-             Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)  2.579132   0.005035  512.22   &lt;2e-16 ***
-sizeMedium  -1.442966   0.018426  -78.31   &lt;2e-16 ***
-sizeSmall   -2.338550   0.045484  -51.41   &lt;2e-16 ***
-public1     -0.585919   0.009484  -61.78   &lt;2e-16 ***
-Zero hurdle model coefficients (binomial with logit link):
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.50263    0.01937 -77.586  &lt; 2e-16 ***
-sizeMedium  -0.86681    0.03232 -26.820  &lt; 2e-16 ***
-sizeSmall   -1.48468    0.04444 -33.411  &lt; 2e-16 ***
-public1     -0.07885    0.02717  -2.902  0.00371 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
-
-Number of iterations in BFGS optimization: 17 
-Log-likelihood: -8.797e+04 on 8 Df</code></pre>
+<div id="hsqlswjwna" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hsqlswjwna table {
+font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+#hsqlswjwna thead, #hsqlswjwna tbody, #hsqlswjwna tfoot, #hsqlswjwna tr, #hsqlswjwna td, #hsqlswjwna th {
+border-style: none;
+}
+#hsqlswjwna p {
+margin: 0;
+padding: 0;
+}
+#hsqlswjwna .gt_table {
+display: table;
+border-collapse: collapse;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+color: #333333;
+font-size: 16px;
+font-weight: normal;
+font-style: normal;
+background-color: #FFFFFF;
+width: auto;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #A8A8A8;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #A8A8A8;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+}
+#hsqlswjwna .gt_caption {
+padding-top: 4px;
+padding-bottom: 4px;
+}
+#hsqlswjwna .gt_title {
+color: #333333;
+font-size: 125%;
+font-weight: initial;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-color: #FFFFFF;
+border-bottom-width: 0;
+}
+#hsqlswjwna .gt_subtitle {
+color: #333333;
+font-size: 85%;
+font-weight: initial;
+padding-top: 3px;
+padding-bottom: 5px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-color: #FFFFFF;
+border-top-width: 0;
+}
+#hsqlswjwna .gt_heading {
+background-color: #FFFFFF;
+text-align: center;
+border-bottom-color: #FFFFFF;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#hsqlswjwna .gt_bottom_border {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#hsqlswjwna .gt_col_headings {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#hsqlswjwna .gt_col_heading {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 6px;
+padding-left: 5px;
+padding-right: 5px;
+overflow-x: hidden;
+}
+#hsqlswjwna .gt_column_spanner_outer {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 4px;
+padding-right: 4px;
+}
+#hsqlswjwna .gt_column_spanner_outer:first-child {
+padding-left: 0;
+}
+#hsqlswjwna .gt_column_spanner_outer:last-child {
+padding-right: 0;
+}
+#hsqlswjwna .gt_column_spanner {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 5px;
+overflow-x: hidden;
+display: inline-block;
+width: 100%;
+}
+#hsqlswjwna .gt_spanner_row {
+border-bottom-style: hidden;
+}
+#hsqlswjwna .gt_group_heading {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+text-align: left;
+}
+#hsqlswjwna .gt_empty_group_heading {
+padding: 0.5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: middle;
+}
+#hsqlswjwna .gt_from_md > :first-child {
+margin-top: 0;
+}
+#hsqlswjwna .gt_from_md > :last-child {
+margin-bottom: 0;
+}
+#hsqlswjwna .gt_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+margin: 10px;
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+overflow-x: hidden;
+}
+#hsqlswjwna .gt_stub {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+}
+#hsqlswjwna .gt_stub_row_group {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: top;
+}
+#hsqlswjwna .gt_row_group_first td {
+border-top-width: 2px;
+}
+#hsqlswjwna .gt_row_group_first th {
+border-top-width: 2px;
+}
+#hsqlswjwna .gt_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#hsqlswjwna .gt_first_summary_row {
+border-top-style: solid;
+border-top-color: #D3D3D3;
+}
+#hsqlswjwna .gt_first_summary_row.thick {
+border-top-width: 2px;
+}
+#hsqlswjwna .gt_last_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#hsqlswjwna .gt_grand_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#hsqlswjwna .gt_first_grand_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-style: double;
+border-top-width: 6px;
+border-top-color: #D3D3D3;
+}
+#hsqlswjwna .gt_last_grand_summary_row_top {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: double;
+border-bottom-width: 6px;
+border-bottom-color: #D3D3D3;
+}
+#hsqlswjwna .gt_striped {
+background-color: rgba(128, 128, 128, 0.05);
+}
+#hsqlswjwna .gt_table_body {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#hsqlswjwna .gt_footnotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#hsqlswjwna .gt_footnote {
+margin: 0px;
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#hsqlswjwna .gt_sourcenotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#hsqlswjwna .gt_sourcenote {
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#hsqlswjwna .gt_left {
+text-align: left;
+}
+#hsqlswjwna .gt_center {
+text-align: center;
+}
+#hsqlswjwna .gt_right {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+#hsqlswjwna .gt_font_normal {
+font-weight: normal;
+}
+#hsqlswjwna .gt_font_bold {
+font-weight: bold;
+}
+#hsqlswjwna .gt_font_italic {
+font-style: italic;
+}
+#hsqlswjwna .gt_super {
+font-size: 65%;
+}
+#hsqlswjwna .gt_footnote_marks {
+font-size: 75%;
+vertical-align: 0.4em;
+position: initial;
+}
+#hsqlswjwna .gt_asterisk {
+font-size: 100%;
+vertical-align: 0;
+}
+#hsqlswjwna .gt_indent_1 {
+text-indent: 5px;
+}
+#hsqlswjwna .gt_indent_2 {
+text-indent: 10px;
+}
+#hsqlswjwna .gt_indent_3 {
+text-indent: 15px;
+}
+#hsqlswjwna .gt_indent_4 {
+text-indent: 20px;
+}
+#hsqlswjwna .gt_indent_5 {
+text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=" "> </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="ZIP">ZIP</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="HP">HP</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers class="gt_row gt_left">count_(Intercept)</td>
+<td headers="ZIP" class="gt_row gt_center">2.578</td>
+<td headers="HP" class="gt_row gt_center">2.579</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.005)</td>
+<td headers="HP" class="gt_row gt_center">(0.005)</td></tr>
+    <tr><td headers class="gt_row gt_left">count_sizeMedium</td>
+<td headers="ZIP" class="gt_row gt_center">-1.439</td>
+<td headers="HP" class="gt_row gt_center">-1.443</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.018)</td>
+<td headers="HP" class="gt_row gt_center">(0.018)</td></tr>
+    <tr><td headers class="gt_row gt_left">count_sizeSmall</td>
+<td headers="ZIP" class="gt_row gt_center">-2.313</td>
+<td headers="HP" class="gt_row gt_center">-2.339</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.045)</td>
+<td headers="HP" class="gt_row gt_center">(0.045)</td></tr>
+    <tr><td headers class="gt_row gt_left">count_public1</td>
+<td headers="ZIP" class="gt_row gt_center">-0.581</td>
+<td headers="HP" class="gt_row gt_center">-0.586</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.009)</td>
+<td headers="HP" class="gt_row gt_center">(0.009)</td></tr>
+    <tr><td headers class="gt_row gt_left">zero_(Intercept)</td>
+<td headers="ZIP" class="gt_row gt_center">1.524</td>
+<td headers="HP" class="gt_row gt_center">-1.503</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.020)</td>
+<td headers="HP" class="gt_row gt_center">(0.019)</td></tr>
+    <tr><td headers class="gt_row gt_left">zero_sizeMedium</td>
+<td headers="ZIP" class="gt_row gt_center">0.761</td>
+<td headers="HP" class="gt_row gt_center">-0.867</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.033)</td>
+<td headers="HP" class="gt_row gt_center">(0.032)</td></tr>
+    <tr><td headers class="gt_row gt_left">zero_sizeSmall</td>
+<td headers="ZIP" class="gt_row gt_center">1.080</td>
+<td headers="HP" class="gt_row gt_center">-1.485</td></tr>
+    <tr><td headers class="gt_row gt_left"></td>
+<td headers="ZIP" class="gt_row gt_center">(0.052)</td>
+<td headers="HP" class="gt_row gt_center">(0.044)</td></tr>
+    <tr><td headers class="gt_row gt_left">zero_public1</td>
+<td headers="ZIP" class="gt_row gt_center">0.027</td>
+<td headers="HP" class="gt_row gt_center">-0.079</td></tr>
+    <tr><td headers class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+<td headers="ZIP" class="gt_row gt_center" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.027)</td>
+<td headers="HP" class="gt_row gt_center" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.027)</td></tr>
+    <tr><td headers class="gt_row gt_left">Num.Obs.</td>
+<td headers="ZIP" class="gt_row gt_center">57480</td>
+<td headers="HP" class="gt_row gt_center">57480</td></tr>
+    <tr><td headers class="gt_row gt_left">R2</td>
+<td headers="ZIP" class="gt_row gt_center">0.102</td>
+<td headers="HP" class="gt_row gt_center">0.104</td></tr>
+    <tr><td headers class="gt_row gt_left">R2 Adj.</td>
+<td headers="ZIP" class="gt_row gt_center">0.102</td>
+<td headers="HP" class="gt_row gt_center">0.104</td></tr>
+    <tr><td headers class="gt_row gt_left">AIC</td>
+<td headers="ZIP" class="gt_row gt_center">175996.0</td>
+<td headers="HP" class="gt_row gt_center">175947.7</td></tr>
+    <tr><td headers class="gt_row gt_left">BIC</td>
+<td headers="ZIP" class="gt_row gt_center">176067.7</td>
+<td headers="HP" class="gt_row gt_center">176019.3</td></tr>
+    <tr><td headers class="gt_row gt_left">RMSE</td>
+<td headers="ZIP" class="gt_row gt_center">9.75</td>
+<td headers="HP" class="gt_row gt_center">9.75</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(m1, m1a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">BIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">m1</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">176019.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m1a</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">176067.7</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>y, x <span class="op">=</span> dmatrices(<span class="st">&quot;vacancies ~ size + public&quot;</span>, df, return_type<span class="op">=</span><span class="st">&#39;dataframe&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This code works under <code>statsmodels &gt;= 0.14.0</code> but as I have older version it does not work.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="op">=</span> HurdleCountModel(endog<span class="op">=</span>y, exog<span class="op">=</span>x, exog_infl<span class="op">=</span>x, inflation<span class="op">=</span><span class="st">&#39;logit&#39;</span>).fit(maxiter <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m1.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 
@@ -2834,13 +3328,13 @@ Log-likelihood: -8.797e+04 on 8 Df</code></pre>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">hurdle</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dist =</span> <span class="st">&quot;negbin&quot;</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">hurdle</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dist =</span> <span class="st">&quot;negbin&quot;</span>, <span class="do">## zero-truncated NB vs zeroinf mamy NB</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2873,7 +3367,7 @@ Log-likelihood: -3.853e+04 on 9 Df</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(m1, m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(m1, m2) <span class="co">#hurdle Poisson vs hurdle NB</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -2901,13 +3395,46 @@ Log-likelihood: -3.853e+04 on 9 Df</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">zeroinfl</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dist =</span> <span class="st">&quot;negbin&quot;</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> pscl<span class="sc">::</span><span class="fu">zeroinfl</span>(<span class="at">formula =</span> vacancies <span class="sc">~</span> size <span class="sc">+</span> public,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dist =</span> <span class="st">&quot;negbin&quot;</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> df)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+pscl::zeroinfl(formula = vacancies ~ size + public, data = df, dist = &quot;negbin&quot;, 
+    link = &quot;logit&quot;)
+
+Pearson residuals:
+     Min       1Q   Median       3Q      Max 
+ -0.2441  -0.2302  -0.1966  -0.1638 240.3510 
+
+Count model coefficients (negbin with log link):
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  1.03705    0.04172   24.86   &lt;2e-16 ***
+sizeMedium  -2.02880    0.05190  -39.09   &lt;2e-16 ***
+sizeSmall   -3.02873    0.07662  -39.53   &lt;2e-16 ***
+public1     -0.83749    0.04916  -17.04   &lt;2e-16 ***
+Log(theta)  -2.77021    0.02514 -110.18   &lt;2e-16 ***
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  -1.9129     0.2202  -8.688  &lt; 2e-16 ***
+sizeMedium    0.9105     0.2126   4.284 1.84e-05 ***
+sizeSmall     1.3597     0.2393   5.682 1.33e-08 ***
+public1     -12.5318    96.1596  -0.130    0.896    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+
+Theta = 0.0626 
+Number of iterations in BFGS optimization: 58 
+Log-likelihood: -3.854e+04 on 9 Df</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(m2,m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(m2,m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -2935,23 +3462,23 @@ Log-likelihood: -3.853e+04 on 9 Df</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">&quot;HurdleNB&quot;</span><span class="ot">=</span>m2, <span class="st">&quot;ZINB&quot;</span><span class="ot">=</span>m3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">&quot;HurdleNB&quot;</span><span class="ot">=</span>m2, <span class="st">&quot;ZINB&quot;</span><span class="ot">=</span>m3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="wnsabggcqb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wnsabggcqb table {
+<div id="vbxctwzbwm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vbxctwzbwm table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#wnsabggcqb thead, #wnsabggcqb tbody, #wnsabggcqb tfoot, #wnsabggcqb tr, #wnsabggcqb td, #wnsabggcqb th {
+#vbxctwzbwm thead, #vbxctwzbwm tbody, #vbxctwzbwm tfoot, #vbxctwzbwm tr, #vbxctwzbwm td, #vbxctwzbwm th {
 border-style: none;
 }
-#wnsabggcqb p {
+#vbxctwzbwm p {
 margin: 0;
 padding: 0;
 }
-#wnsabggcqb .gt_table {
+#vbxctwzbwm .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2976,11 +3503,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#wnsabggcqb .gt_caption {
+#vbxctwzbwm .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#wnsabggcqb .gt_title {
+#vbxctwzbwm .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2991,7 +3518,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#wnsabggcqb .gt_subtitle {
+#vbxctwzbwm .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3002,7 +3529,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#wnsabggcqb .gt_heading {
+#vbxctwzbwm .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3013,12 +3540,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#wnsabggcqb .gt_bottom_border {
+#vbxctwzbwm .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wnsabggcqb .gt_col_headings {
+#vbxctwzbwm .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3032,7 +3559,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#wnsabggcqb .gt_col_heading {
+#vbxctwzbwm .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3051,7 +3578,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#wnsabggcqb .gt_column_spanner_outer {
+#vbxctwzbwm .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3062,13 +3589,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#wnsabggcqb .gt_column_spanner_outer:first-child {
+#vbxctwzbwm .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#wnsabggcqb .gt_column_spanner_outer:last-child {
+#vbxctwzbwm .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#wnsabggcqb .gt_column_spanner {
+#vbxctwzbwm .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3079,10 +3606,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#wnsabggcqb .gt_spanner_row {
+#vbxctwzbwm .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#wnsabggcqb .gt_group_heading {
+#vbxctwzbwm .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3107,7 +3634,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#wnsabggcqb .gt_empty_group_heading {
+#vbxctwzbwm .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3121,13 +3648,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#wnsabggcqb .gt_from_md > :first-child {
+#vbxctwzbwm .gt_from_md > :first-child {
 margin-top: 0;
 }
-#wnsabggcqb .gt_from_md > :last-child {
+#vbxctwzbwm .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#wnsabggcqb .gt_row {
+#vbxctwzbwm .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3145,7 +3672,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#wnsabggcqb .gt_stub {
+#vbxctwzbwm .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3157,7 +3684,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wnsabggcqb .gt_stub_row_group {
+#vbxctwzbwm .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3170,13 +3697,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#wnsabggcqb .gt_row_group_first td {
+#vbxctwzbwm .gt_row_group_first td {
 border-top-width: 2px;
 }
-#wnsabggcqb .gt_row_group_first th {
+#vbxctwzbwm .gt_row_group_first th {
 border-top-width: 2px;
 }
-#wnsabggcqb .gt_summary_row {
+#vbxctwzbwm .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3185,14 +3712,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wnsabggcqb .gt_first_summary_row {
+#vbxctwzbwm .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#wnsabggcqb .gt_first_summary_row.thick {
+#vbxctwzbwm .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#wnsabggcqb .gt_last_summary_row {
+#vbxctwzbwm .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3201,7 +3728,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wnsabggcqb .gt_grand_summary_row {
+#vbxctwzbwm .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3210,7 +3737,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wnsabggcqb .gt_first_grand_summary_row {
+#vbxctwzbwm .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3219,7 +3746,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#wnsabggcqb .gt_last_grand_summary_row_top {
+#vbxctwzbwm .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3228,10 +3755,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#wnsabggcqb .gt_striped {
+#vbxctwzbwm .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#wnsabggcqb .gt_table_body {
+#vbxctwzbwm .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3239,7 +3766,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wnsabggcqb .gt_footnotes {
+#vbxctwzbwm .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3252,7 +3779,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#wnsabggcqb .gt_footnote {
+#vbxctwzbwm .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3260,7 +3787,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wnsabggcqb .gt_sourcenotes {
+#vbxctwzbwm .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3273,57 +3800,57 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#wnsabggcqb .gt_sourcenote {
+#vbxctwzbwm .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wnsabggcqb .gt_left {
+#vbxctwzbwm .gt_left {
 text-align: left;
 }
-#wnsabggcqb .gt_center {
+#vbxctwzbwm .gt_center {
 text-align: center;
 }
-#wnsabggcqb .gt_right {
+#vbxctwzbwm .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#wnsabggcqb .gt_font_normal {
+#vbxctwzbwm .gt_font_normal {
 font-weight: normal;
 }
-#wnsabggcqb .gt_font_bold {
+#vbxctwzbwm .gt_font_bold {
 font-weight: bold;
 }
-#wnsabggcqb .gt_font_italic {
+#vbxctwzbwm .gt_font_italic {
 font-style: italic;
 }
-#wnsabggcqb .gt_super {
+#vbxctwzbwm .gt_super {
 font-size: 65%;
 }
-#wnsabggcqb .gt_footnote_marks {
+#vbxctwzbwm .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#wnsabggcqb .gt_asterisk {
+#vbxctwzbwm .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#wnsabggcqb .gt_indent_1 {
+#vbxctwzbwm .gt_indent_1 {
 text-indent: 5px;
 }
-#wnsabggcqb .gt_indent_2 {
+#vbxctwzbwm .gt_indent_2 {
 text-indent: 10px;
 }
-#wnsabggcqb .gt_indent_3 {
+#vbxctwzbwm .gt_indent_3 {
 text-indent: 15px;
 }
-#wnsabggcqb .gt_indent_4 {
+#vbxctwzbwm .gt_indent_4 {
 text-indent: 20px;
 }
-#wnsabggcqb .gt_indent_5 {
+#vbxctwzbwm .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
